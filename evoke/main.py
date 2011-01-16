@@ -1,29 +1,44 @@
 #!/usr/bin/env python
+
 import os
-import sys
 import cmdln
 import shutil
-import subprocess as sp
+import subprocess as SP
 import os.path as P
+import glob as G
+import configobj
 
-class NameConflict(Exception):
-    def __init__(self):
-        Exception.__init__(self, "Two project templates have been created with the same name")
+from functools import wraps
+from errors import ConfigMissing, NameConflict, InvalidTemplatePackage
 
 
-class ProjectTemplate(object):
+
+# Monkey patching os.path module to get the real f-ing path
+P.wtfpath = lambda p: P.abspath(P.expandvars(P.expanduser(p)))
+
+def requires_path(fn):
+    @wraps(fn)
+    def _inner(*args, **kwargs):
+        assert len(args) + len(kwargs.items()) > 3, 'you must provide a path'
+        return fn(*args, **kwargs)
+    return _inner    
+
+def slugify(s, char):
+    '''removes changes all non [A-Za-z0-9] and changes them to '''
+    import re
+    return re.sub(r'[^A-Za-z0-9]+', char, s)
+    
+class TemplatePackage(object):
     pool = {}
     
     def __init__(self, path, name, docs=None):
         object.__init__(self)
         self.path = path
+        self.evkpath = P.join(path, '.evk')
+        self.confpath = P.join(self.evkpath, 'config')
         self.is_file = P.isfile(path)
         self.name = name
         self.docs = docs
-        if name not in self.pool:
-            self.pool[name] = self
-        else:
-            raise NameConflict
     
     def copy(self, dest):
         if self.is_file:
@@ -31,32 +46,68 @@ class ProjectTemplate(object):
         else:
             shutil.copytree(self.path, dest)
     
-    def genconfig(self):
-        '''serialize the config about this project template into'''
+    def save(self):
+        '''Serialize the config about this template package and save'''
+        
         pass
     
     @classmethod
-    def checkpool(cls):
-        '''test to make sure all current paths exist'''
-        pass
+    def load(cls, pkgpath):
+        '''Load a single template package given a path'''
+        pkgpath = P.wtfpath(pkgpath)
+        pkgconfpath = P.join(pkgpath, '.evk/config')
+        
+        # check path and validity of package
+        if not P.exists(pkgpath):
+            raise InvalidTemplatePackage(pkgpath, 'path does not exist')
+        if not P.exists(pkgconfpath):
+            raise InvalidTemplatePackage(pkgpath, 'missing .evk folder')
+        
+        conf = configobj.ConfigObj(pkgconfpath)
+        
+        # make sure we don't already have another package with same name
+        if conf['name'].strip() in cls.pool:
+            raise NameConflict(conf['name'].strip(), cls.pool[conf['name'].strip()].path)
+        
+        # create and add template to pool
+        templatepkg = TemplatePackage(
+            path=pkgpath, 
+            name=conf['name'].strip(), 
+            docs=conf.get('docs', None))
+        
+        cls.pool[templatepkg.name] = templatepkg
+        
+        
         
     @classmethod
-    def load(cls):
-        '''test to make sure all current paths exist'''
-        pass
+    def loadrepo(cls, repopath):
+        '''Load all template packages from repository'''
+        tpackage_paths = G.glob(P.join(repopath, '*'))
+        for pkgpath in tpackage_paths:
+            cls.load(pkgpath)
 
-from functools import wraps
-def requires_path(fn):
-    @wraps(fn)
-    def _inner(*args, **kwargs):
-        assert len(args) + len(kwargs.items()) > 3, 'you must provide a path'
-        return fn(*args, **kwargs)
-    return _inner    
-        
+
+
+CONFIGPATH = '~/.evoke/config'
 class App(cmdln.Cmdln):
-    name = 'evoke'
-    editor = 'mate'
-    repopath = '~/.evoke/templates'
+    name = 'evk'
+
+    def __init__(self):
+        cmdln.Cmdln.__init__(self)
+
+        # load configuration file
+        confpath = P.wtfpath(CONFIGPATH)
+        if not P.exists(confpath):
+            raise ConfigMissing
+            
+        conf = configobj.ConfigObj(confpath)
+        self.repopath = P.abspath(P.expandvars(P.expanduser(self.conf['repopath'])))
+        
+        # load template packages
+        TemplatePackage.loadrepo(self.repopath)
+        
+        # misc
+        self.editor = os.environ.get('editor', 'vi')
     
     @cmdln.alias('p')
     @requires_path           
@@ -76,10 +127,12 @@ class App(cmdln.Cmdln):
     @cmdln.alias('i')
     def do_install(self, subcmd, opts, *paths):
         '''${cmd_name}: add [path] to your repository of project templates'''
-        path = P.absolute(P.expandvars(paths[0]))
+        path = P.wtfpath(paths[0])
         if P.isfile(path):
             name = P.split(path)[-1]
-            shutil.copyfile(path, P.join(self.repopath))
+            name = slugify(name.strip())
+            pkgpath = P.join(self.repopath, name)
+            shutil.copyfile(path)
         else:
             shutil.copytree(path, self.repopath)
     
@@ -90,7 +143,7 @@ class App(cmdln.Cmdln):
         pass
         
 
-    # @requires_path
+    @requires_path
     @cmdln.alias('e')
     @cmdln.option('-c', '--config', action='store_true', dest='config', default=False,
                   help=('Edit the configuration file templates instead of the actual'
@@ -100,20 +153,22 @@ class App(cmdln.Cmdln):
            ${cmd_option_list}
         '''
         name = paths[0]
-        projtpl = ProjectTemplate.pool.get(name)
-        sp.Popen('%s %s' % (self.editor, projtpl.path))
+        projtpl = TemplatePackage.pool.get(name)
+        SP.Popen('%s %s' % (self.editor, projtpl.path))
         
+
     @requires_path
     @cmdln.alias('d')
     def do_doc(self, subcmd, opts, *paths):
         '''${cmd_name}: print documentation about the project templates'''
         name = paths[0]
-        print ProjectTemplate.pool.get(name).docs
+        print TemplatePackage.pool.get(name).docs
         
+
     @cmdln.alias('ls')
     def do_list(self, subcmd, opts, *paths):
         '''${cmd_name}: list all the available templates'''
-        templates = ProjectTemplate.pool.values()
+        templates = TemplatePackage.pool.values()
         maxlen = max(len(i) for i in templates)
         print ''
         print '\n'.join('{0:<{maxlen}}\t{1}'.format(i.name, i.doc, maxlen=maxlen) for i in templates)
@@ -123,10 +178,9 @@ class App(cmdln.Cmdln):
                   help='save the completions to the default completions file')
     def do_compgen(self, subcmd, opts, *paths):
         '''${cmd_name}: generate the completions file
-            
            ${cmd_option_list}
         '''
-        print '\n'.join(ProjectTemplate.pool.keys())
+        print '\n'.join(TemplatePackage.pool.keys())
         
         
 
