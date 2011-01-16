@@ -131,6 +131,4 @@ class App(cmdln.Cmdln):
         
 
 
-if __name__ == "__main__":
-    app = App()
-    sys.exit(app.main())
+
