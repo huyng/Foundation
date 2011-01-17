@@ -9,7 +9,7 @@ import glob as G
 import configobj
 
 from functools import wraps
-from errors import ConfigMissing, NameConflict, InvalidTemplatePackage
+from errors import ConfigMissing, NameConflict, InvalidTemplatePackage, PackageDoesNotExist
 
 
 
@@ -52,9 +52,9 @@ class TemplatePackage(object):
         dest = P.wtfpath(dest)
         putpath = P.join(self.pkgpath, self.putpath) if self.putpath else self.pkgpath
         if P.isfile(putpath):
-            shutil.copyfile(self.putpath, dest)
+            shutil.copyfile(putpath, dest)
         else:
-            shutil.copytree(self.putpath, dest, ignore=shutil.ignore_patterns('*.evk'))
+            shutil.copytree(putpath, dest, ignore=shutil.ignore_patterns('*.evk'))
 
     
     def save(self):
@@ -103,6 +103,7 @@ class TemplatePackage(object):
         
     def remove(self):
         shutil.rmtree(self.pkgpath)
+        del TemplatePackage.pool[self.name]
         
     @classmethod
     def loadrepo(cls, repopath):
@@ -110,6 +111,16 @@ class TemplatePackage(object):
         tpackage_paths = G.glob(P.join(repopath, '*'))
         for pkgpath in tpackage_paths:
             cls.load(pkgpath)
+    
+    @classmethod
+    def completegen(cls, completionspath):
+        '''generate the completions file'''
+        completions = '\n'.join(TemplatePackage.pool.keys())
+        f = open(completionspath,'w')
+        f.write(completions)
+        f.close()
+
+        
 
 
 
@@ -127,7 +138,7 @@ class App(cmdln.Cmdln):
             
         conf = configobj.ConfigObj(confpath)
         self.repopath = P.wtfpath(conf['repopath'])
-        self.completionspath = P.wtfpath(conf['competions'])
+        self.completionspath = P.wtfpath(conf['completions'])
         
         # load template packages
         TemplatePackage.loadrepo(self.repopath)
@@ -136,7 +147,6 @@ class App(cmdln.Cmdln):
         self.editor = os.environ.get('EDITOR', 'vi')
     
     @cmdln.alias('p')
-    @requires_path           
     def do_put(self, subcmd, opts, *paths):
         '''${cmd_name}: create new project from template'''
         name = paths[0]
@@ -174,18 +184,28 @@ class App(cmdln.Cmdln):
             
         
         templatepkg.save()
+        TemplatePackage.pool[templatepkg.name] = templatepkg
+        TemplatePackage.completegen(self.completionspath)
+        
     
-    @requires_path
     @cmdln.alias('rm')
     def do_remove(self, subcmd, opts, *paths):
-        '''${cmd_name}: removes template package NAME from the repository
+        '''${cmd_name}: removes template package from the repository
         
         Usage:
             evk remove NAME
         '''
         name = paths[0]
-        templatepkg = TemplatePackage.pool.get(name)
-        templatepkg.remove()
+        if not name in TemplatePackage.pool:
+            raise PackageDoesNotExist(name)
+            
+        templatepkg = TemplatePackage.pool[name]
+        has_confirmed = raw_input('Type "y" to delete package "%s" at "%s" y/n: ' %(name, templatepkg.pkgpath))
+        if has_confirmed == 'y':
+            templatepkg.remove()
+            TemplatePackage.completegen(self.completionspath)
+        else:
+            print 'operation canceled'
         
         
 
@@ -193,7 +213,7 @@ class App(cmdln.Cmdln):
     @cmdln.option('-c', '--config', action='store_true', dest='config', default=False,
                   help='Edit the configuration file for template package')
     def do_edit(self, subcmd, opts, *paths):
-        '''${cmd_name}: edit this project template in your editor
+        '''${cmd_name}: edit a template package in your editor
            
            ${cmd_option_list}
         '''
@@ -201,15 +221,13 @@ class App(cmdln.Cmdln):
         templatepkg = TemplatePackage.pool.get(name)
         if opts.config:
             SP.call('%s %s' % (self.editor, templatepkg.evkpath), shell=True)
-        elif opts.docs:
-            SP.call('%s %s' % (self.editor, templatepkg.docpath), shell=True)
         else:
             SP.call('%s %s' % (self.editor, templatepkg.pkgpath), shell=True)
         
 
     @cmdln.alias('d')
     def do_doc(self, subcmd, opts, *paths):
-        '''${cmd_name}: print documentation about the project templates'''
+        '''${cmd_name}: print documentation about the template packages'''
         name = paths[0]
         print ''
         print TemplatePackage.pool.get(name).docs
@@ -222,23 +240,6 @@ class App(cmdln.Cmdln):
         maxlen = max(len(i.name) for i in templates)
         print 'template packages:\n'
         print '\n'.join('\t{0:<{maxlen}}\t{1}'.format(i.name, i.docs, maxlen=maxlen) for i in templates)
-        
-    
-    @cmdln.option('-s', '--save', action='store_true', dest='save',
-                  help='save the completions to the default completions file')
-    def do_compgen(self, subcmd, opts, *paths):
-        '''${cmd_name}: generate the completions file
-        
-           ${cmd_option_list}
-        '''
-        completions = '\n'.join(TemplatePackage.pool.keys())
-        if opts.save:
-            f = open(self.completionspath,'w')
-            f.write(completions)
-            f.close()
-            print('saved completions to %s' % self.completionspath)
-        else:
-            print(completions)
         
         
 

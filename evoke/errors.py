@@ -4,6 +4,10 @@ class BaseError(Exception):
 class NameConflict(BaseError):
     def __init__(self, name, conflict_pkgpath):
         BaseError.__init__(self, "The name '%s' conflicts with the package at '%s'" %(name, conflict_pkgpath))
+        
+class PackageDoesNotExist(BaseError):
+    def __init__(self, name):
+        BaseError.__init__(self, "The package '%s' does not exist" % name)
 
 class ConfigMissing(BaseError):
     def __init__(self):
