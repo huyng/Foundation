@@ -1,1 +1,3 @@
 repopath="~/.evoke/repository"
+completions="~/.evoke/completions"
+shellscript="~/.evoke/evoke.sh"

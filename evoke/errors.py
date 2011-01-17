@@ -1,14 +1,17 @@
-class NameConflict(Exception):
+class BaseError(Exception):
+    pass
+
+class NameConflict(BaseError):
     def __init__(self, name, conflict_pkgpath):
-        Exception.__init__(self, "The name '%s' conflicts with the package at '%s'" %(name, conflict_pkgpath))
+        BaseError.__init__(self, "The name '%s' conflicts with the package at '%s'" %(name, conflict_pkgpath))
 
-class ConfigMissing(Exception):
+class ConfigMissing(BaseError):
     def __init__(self):
-        Exception.__init__(self, "Missing config file ~/.evoke/default.conf")
+        BaseError.__init__(self, "Missing config file ~/.evoke/default.conf")
 
-class InvalidTemplatePackage(Exception):
+class InvalidTemplatePackage(BaseError):
     def __init__(self, pkgpath, reason=''):
         if reason:
             reason = '(%s) ' % reason
-        Exception.__init__(self, "Invalid Template Package %s%s" % (reason,pkgpath))
+        BaseError.__init__(self, "Invalid Template Package %s%s" % (reason,pkgpath))
 
