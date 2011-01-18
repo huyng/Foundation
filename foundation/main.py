@@ -278,6 +278,9 @@ class App(cmdln.Cmdln):
             raise MissingPackageName
         name = paths[0]
         templatepkg = TemplatePackage.pool.get(name)
+        if not templatepkg:
+            raise PackageDoesNotExist(name)
+
         if opts.config:
             SP.call('%s %s' % (self.editor, templatepkg.fdnpath), shell=True)
         else:
