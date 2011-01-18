@@ -1,0 +1,86 @@
+# Foundation (fdn) #
+
+Foundation is a scaffolding tool. It tracks your often-used project templates 
+and code snippets in an easy-to-use commandline app and allows you to quickly
+generate new files from your saved templates.  
+
+# Features
+
+
+    Usage:
+        fdn COMMAND [ARGS...]
+        fdn help [COMMAND]
+
+    Options:
+        -h, --help  show this help message and exit
+
+    Commands:
+        add (a)          add file or folder to your repository of project templ...
+        clip (cc)        copy the contents to clipboard (only valid for file te...
+        doc (d)          print documentation about the template packages
+        edit (e)         edit a template package in your editor
+        help (?)         give detailed help on a specific sub-command
+        list (ls)        list all the available templates
+        put (p)          create new project from template
+        remove (rm)      removes template package from the repository
+
+## Installation ##
+    
+    python setup.py install
+    
+    # Add this to your .bashrc or .profile
+    source ~/.foundation/foundation.sh
+
+
+
+## Commands ##
+
+### add ###
+
+Adds a DIRECTORY or FILE path to your personal repository of code snippets and project templates
+
+    fdn add <DIRECTORY> | <FILE>
+
+### put ###
+
+Clones the package NAME into the given PATH
+
+    fdn put <NAME> <PATH>
+    
+### list ###
+
+List the packages available in your repository
+
+    fdn ls
+
+### remove ###
+
+Removes the package NAME from your repository
+    
+    fdn remove <NAME>
+    
+### edit ###
+
+Edit the package NAME from your repository
+    
+    fdn edit <NAME>
+
+### doc ###
+
+Print the documentation for the package <NAME>
+
+    fdn doc <NAME>
+    
+### clipboard ###
+
+Copy the contents of a package into clipboard (must be file based not directory based)
+
+    fdn clipboard <NAME>
+
+### help ###
+
+Print help message for the given COMMAND
+
+    fdn help <COMMAND>
+    
+

@@ -2,15 +2,15 @@
 from distutils.core import setup
 import os.path as P
 
-LOCAL = P.abspath(P.expanduser('~/.evoke'))
+LOCAL = P.abspath(P.expanduser('~/.foundation'))
 
-setup( name='evoke (evk)',
+setup( name='foundation (fdn)',
        version='0.1',
        description='Easily create, use, organize, and share your often-used & well-worn code snippets and project templates',
        author='Huy Nguyen',
        author_email='huy@huyng.com',
-       packages=['evoke'],
+       packages=['foundation'],
        data_files=[(LOCAL, ['datafiles/config', 
                             'datafiles/completions', 
-                            'datafiles/evoke.sh'])],
-       scripts=['scripts/evk'] )
+                            'datafiles/foundation.sh'])],
+       scripts=['scripts/fdn'] )

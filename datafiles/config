@@ -1,3 +1,3 @@
-repopath="~/.evoke/repository"
-completions="~/.evoke/completions"
-shellscript="~/.evoke/evoke.sh"
+repopath="~/.foundation/repository"
+completions="~/.foundation/completions"
+shellscript="~/.foundation/foundation.sh"
