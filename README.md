@@ -2,7 +2,7 @@
 
 #### Type your boilerplate code once and only once ####
 
-**Foundation** is a scaffolding tool. It tracks your often-used project templates, code snippets and other 
+Foundation is a scaffolding tool. It tracks your often-used project templates, code snippets and other 
 boilerplate in an easy-to-use commandline app. With a single command, generate exactly the source code
 you need for starting new projects.
 
