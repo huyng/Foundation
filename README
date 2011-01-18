@@ -1,13 +1,10 @@
 # Foundation (fdn) #
 
-Foundation is a scaffolding tool. It tracks your often-used project templates 
-and code snippets in an easy-to-use commandline app and allows you to quickly
-generate new files from your saved templates.  
+#### Type your boilerplate code once and only once ####
 
-
-
- 
-
+**Foundation** is a scaffolding tool. It tracks your often-used project templates, code snippets and other 
+boilerplate in an easy-to-use commandline app. With a single command, generate exactly the source code
+you need for starting new projects.
 
     Usage:
         fdn COMMAND [ARGS...]
@@ -73,17 +70,22 @@ Print the documentation for the package <NAME>
 
     fdn doc <NAME>
     
-### clipboard ###
+### clilp ###
 
 Copy the contents of a package into clipboard (must be file based not directory based)
 
-    fdn clipboard <NAME>
+    fdn clip <NAME>
 
 ### help ###
 
 Print help message for the given COMMAND
 
     fdn help <COMMAND> 
+
+## Configuration ##
+
+All relevant files for this command live under **~/.foundation/**. All template packages will reside
+under **~/.foundation/repository**.
 
 # License #
 

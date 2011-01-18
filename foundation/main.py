@@ -153,6 +153,8 @@ class App(cmdln.Cmdln):
         self.completionspath = P.wtfpath(conf['completions'])
         
         # load template packages
+        if not P.exists(self.repopath):
+            os.mkdir(self.repopath)
         TemplatePackage.loadrepo(self.repopath)
         
         # misc
@@ -252,9 +254,12 @@ class App(cmdln.Cmdln):
     def do_list(self, subcmd, opts, *paths):
         '''${cmd_name}: list all the available templates'''
         templates = TemplatePackage.pool.values()
-        maxlen = max(len(i.name) for i in templates)
-        print 'template packages:\n'
-        print '\n'.join('\t{0:<{maxlen}}\t{1}'.format(i.name, i.docs, maxlen=maxlen) for i in templates)
+        if templates:
+            maxlen = max(len(i.name) for i in templates)
+            print 'Template packages:\n'
+            print '\n'.join('\t{0:<{maxlen}}\t{1}'.format(i.name, i.docs, maxlen=maxlen) for i in templates)
+        else:
+            print 'No packages available'
         
         
 
