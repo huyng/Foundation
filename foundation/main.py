@@ -181,9 +181,14 @@ class App(cmdln.Cmdln):
         elif len(paths) == 1:
             raise MissingPath
         
-        name = paths[0]
         dest = P.wtfpath(paths[1])
+        
+        # get package
+        name = paths[0]
         templatepkg = TemplatePackage.pool.get(name)
+        if not templatepkg:
+            raise PackageDoesNotExist(name)
+        
         templatepkg.put(dest)
     
     @cmdln.alias('cc')
@@ -191,11 +196,13 @@ class App(cmdln.Cmdln):
         '''${cmd_name}: copy the contents to clipboard (only valid for file templates)'''
         if len(paths) < 1:
             raise MissingPackageName
-
+            
+        # get package
         name = paths[0]
         templatepkg = TemplatePackage.pool.get(name)
         if not templatepkg:
             raise PackageDoesNotExist(name)
+            
         templatepkg.pbcopy()
         
     @cmdln.alias('o')
@@ -203,11 +210,13 @@ class App(cmdln.Cmdln):
         '''${cmd_name}: copy the contents to clipboard (only valid for file templates)'''
         if len(paths) < 1:
             raise MissingPackageName
-            
+        
+        # get package    
         name = paths[0]
         templatepkg = TemplatePackage.pool.get(name)
         if not templatepkg:
             raise PackageDoesNotExist(name)
+            
         templatepkg.browse()
         
     
@@ -251,7 +260,8 @@ class App(cmdln.Cmdln):
         '''
         if len(paths) < 1:
             raise MissingPackageName
-        
+            
+        # get package
         name = paths[0]
         if not name in TemplatePackage.pool:
             raise PackageDoesNotExist(name)
@@ -276,6 +286,8 @@ class App(cmdln.Cmdln):
         '''
         if len(paths) < 1:
             raise MissingPackageName
+        
+        # get package
         name = paths[0]
         templatepkg = TemplatePackage.pool.get(name)
         if not templatepkg:
@@ -292,9 +304,15 @@ class App(cmdln.Cmdln):
         '''${cmd_name}: print documentation about the template packages'''
         if len(paths) < 1:
             raise MissingPackageName
+            
+        # get package
         name = paths[0]
+        templatepkg = TemplatePackage.pool.get(name)
+        if not templatepkg:
+            raise PackageDoesNotExist(name)
+        
         print ''
-        print TemplatePackage.pool.get(name).docs
+        print templatepkg.docs
         
 
     @cmdln.alias('ls')
