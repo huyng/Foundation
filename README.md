@@ -108,7 +108,7 @@ Print help message for the given COMMAND
 - All template packages are folders that reside in **~/.foundation/repository**.
 - All template packages contain an **.fdn** direcotry 
 - Each **.fdn** directory contains a *config* file which has settings such as the "name" of a package and the files that should be copied when using the `put` command.
-- Each **.fdn** directory contains a *DESCRIPTION* which contains the description to be printed out when using the `doc` command.
+- Each **.fdn** directory contains a *DESCRIPTION* file which contains the description to be printed out when using the `doc` command.
 
 # License #
 

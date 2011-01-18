@@ -44,7 +44,7 @@ class TemplatePackage(object):
         self.fdnpath  = P.join(pkgpath, '.fdn')
         self.confpath = P.join(self.fdnpath, 'config')
         self.putpath  = putpath
-        self.docpath  = P.join(self.fdnpath, 'README')
+        self.docpath  = P.join(self.fdnpath, 'DESCRIPTION')
 
     
     @property
@@ -223,7 +223,10 @@ class App(cmdln.Cmdln):
     @cmdln.alias('a')
     @cmdln.option('-n','--name', dest='name', help='a name for the package', default=None)
     def do_add(self, subcmd, opts, *paths):
-        '''${cmd_name}: add file or folder to your repository of project templates'''
+        '''${cmd_name}: add file or folder to your repository of project templates
+        
+        ${cmd_option_list}
+        '''
         if len(paths) == 0:
             raise MissingPath
 
