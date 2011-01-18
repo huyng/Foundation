@@ -60,12 +60,12 @@ class TemplatePackage(object):
         if not self.putpath:
             raise IncompatiablePackage
         putpath = P.join(self.pkgpath, self.putpath) if self.putpath else self.pkgpath
-        if P.isfile(putpath):
-            pbcopy = SP.Popen('pbcopy', stdin=SP.PIPE)
-            pbcopy.stdin.write(open(putpath).read())
-            pbcopy.communicate()
-        else:
+        if not P.isfile(putpath):
             raise IncompatiablePackage
+        pbcopy = SP.Popen('pbcopy', stdin=SP.PIPE)
+        pbcopy.stdin.write(open(putpath).read())
+        pbcopy.communicate()
+
             
 
     
@@ -173,7 +173,7 @@ class App(cmdln.Cmdln):
         templatepkg = TemplatePackage.pool.get(name)
         if not templatepkg:
             raise PackageDoesNotExist(name)
-        
+        templatepkg.pbcopy()
         
     
     @cmdln.alias('a')
