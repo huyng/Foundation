@@ -65,6 +65,10 @@ class TemplatePackage(object):
         pbcopy = SP.Popen('pbcopy', stdin=SP.PIPE)
         pbcopy.stdin.write(open(putpath).read())
         pbcopy.communicate()
+        
+    def browse(self):
+        SP.call('open %s' % self.pkgpath, shell=True)
+        
 
             
 
@@ -177,12 +181,22 @@ class App(cmdln.Cmdln):
             raise PackageDoesNotExist(name)
         templatepkg.pbcopy()
         
+    @cmdln.alias('o')
+    def do_open(self, subcmd, opts, *paths):
+        '''${cmd_name}: copy the contents to clipboard (only valid for file templates)'''
+        name = paths[0]
+        templatepkg = TemplatePackage.pool.get(name)
+        if not templatepkg:
+            raise PackageDoesNotExist(name)
+        templatepkg.browse()
+        
     
     @cmdln.alias('a')
+    @cmdln.option('-n','--name', dest='name', help='a name for the package', default=None)
     def do_add(self, subcmd, opts, *paths):
         '''${cmd_name}: add file or folder to your repository of project templates'''
         path    = P.wtfpath(paths[0])
-        name    = slugify(P.split(path)[-1].strip(),'-')
+        name    = slugify(opts.name,'-') if opts.name else  slugify(P.split(path)[-1].strip(),'-')
         pkgpath = P.join(self.repopath, name)
         
         # check if we've already got the package

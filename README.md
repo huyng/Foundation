@@ -14,8 +14,8 @@ you need for starting new projects.
         -h, --help  show this help message and exit
 
     Commands:
-        add (a)          add file or folder to your repository of project templ...
-        clip (cc)        copy the contents to clipboard (only valid for file te...
+        add (a)          add file or folder to your repository of project templates
+        clip (cc)        copy the contents of file to clipboard 
         doc (d)          print documentation about the template packages
         edit (e)         edit a template package in your editor
         help (?)         give detailed help on a specific sub-command
@@ -23,60 +23,80 @@ you need for starting new projects.
         put (p)          create new project from template
         remove (rm)      removes template package from the repository
 
-## Installation ##
+## Getting Started ##
     
+    # Download source
+    git clone git://github.com/huyng/Foundation.git
+    
+    # Install
     python setup.py install --user
     
     # Add this to your .bashrc or .profile
     source ~/.foundation/foundation.sh
+    
+    # Create sample package and add to repository
+    mkdir samplepackage
+    echo "hello world" > samplepackage/test.txt
+    fdn add samplepackage
+    
+    # Generate a new project from previously added scaffold
+    cd /tmp
+    fdn put samplepackage samplepackage2
+    
 
 
 
 ## Commands ##
 
-### add ###
+**add**
 
 Adds a DIRECTORY or FILE path to your personal repository of code snippets and project templates
 
     fdn add <DIRECTORY> | <FILE>
 
-### put ###
+**put**
 
 Copies the package NAME from your personal repository into the given PATH
 
     fdn put <NAME> <PATH>
     
-### list ###
+**list**
 
 List the packages available in your repository
 
     fdn ls
 
-### remove ###
+**remove**
 
 Removes the package NAME from your repository
     
     fdn remove <NAME>
     
-### edit ###
+**edit**
 
 Edit the package NAME from your repository
     
     fdn edit <NAME>
+    
+**open**
 
-### doc ###
+Reveal package NAME from your repository in Finder
+    
+    fdn open <NAME>
+
+**doc**
 
 Print the documentation for the package <NAME>
 
     fdn doc <NAME>
     
-### clilp ###
+**clip**
 
 Copy the contents of a package into clipboard (must be file based not directory based)
 
     fdn clip <NAME>
 
-### help ###
+**help**
 
 Print help message for the given COMMAND
 
