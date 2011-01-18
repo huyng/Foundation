@@ -9,7 +9,13 @@ import glob as G
 import configobj
 
 from functools import wraps
-from errors import ConfigMissing, NameConflict, InvalidTemplatePackage, PackageDoesNotExist, IncompatiablePackage
+from errors import ConfigMissing, \
+                   NameConflict, \
+                   InvalidTemplatePackage, \
+                   PackageDoesNotExist, \
+                   IncompatiablePackage, \
+                   MissingPackageName, \
+                   MissingPath
 
 
 
@@ -161,12 +167,20 @@ class App(cmdln.Cmdln):
             os.mkdir(self.repopath)
         TemplatePackage.loadrepo(self.repopath)
         
+        # Generate completions file
+        TemplatePackage.completegen(self.completionspath)
+        
         # misc
         self.editor = os.environ.get('EDITOR', 'vi')
     
     @cmdln.alias('p')
     def do_put(self, subcmd, opts, *paths):
         '''${cmd_name}: create new project from template'''
+        if len(paths) == 0:
+            raise MissingPackageName
+        elif len(paths) == 1:
+            raise MissingPath
+        
         name = paths[0]
         dest = P.wtfpath(paths[1])
         templatepkg = TemplatePackage.pool.get(name)
@@ -175,6 +189,9 @@ class App(cmdln.Cmdln):
     @cmdln.alias('cc')
     def do_clip(self, subcmd, opts, *paths):
         '''${cmd_name}: copy the contents to clipboard (only valid for file templates)'''
+        if len(paths) < 1:
+            raise MissingPackageName
+
         name = paths[0]
         templatepkg = TemplatePackage.pool.get(name)
         if not templatepkg:
@@ -184,6 +201,9 @@ class App(cmdln.Cmdln):
     @cmdln.alias('o')
     def do_open(self, subcmd, opts, *paths):
         '''${cmd_name}: copy the contents to clipboard (only valid for file templates)'''
+        if len(paths) < 1:
+            raise MissingPackageName
+            
         name = paths[0]
         templatepkg = TemplatePackage.pool.get(name)
         if not templatepkg:
@@ -195,6 +215,9 @@ class App(cmdln.Cmdln):
     @cmdln.option('-n','--name', dest='name', help='a name for the package', default=None)
     def do_add(self, subcmd, opts, *paths):
         '''${cmd_name}: add file or folder to your repository of project templates'''
+        if len(paths) == 0:
+            raise MissingPath
+
         path    = P.wtfpath(paths[0])
         name    = slugify(opts.name,'-') if opts.name else  slugify(P.split(path)[-1].strip(),'-')
         pkgpath = P.join(self.repopath, name)
@@ -226,6 +249,9 @@ class App(cmdln.Cmdln):
         Usage:
             fdn remove NAME
         '''
+        if len(paths) < 1:
+            raise MissingPackageName
+        
         name = paths[0]
         if not name in TemplatePackage.pool:
             raise PackageDoesNotExist(name)
@@ -248,6 +274,8 @@ class App(cmdln.Cmdln):
            
            ${cmd_option_list}
         '''
+        if len(paths) < 1:
+            raise MissingPackageName
         name = paths[0]
         templatepkg = TemplatePackage.pool.get(name)
         if opts.config:
@@ -259,6 +287,8 @@ class App(cmdln.Cmdln):
     @cmdln.alias('d')
     def do_doc(self, subcmd, opts, *paths):
         '''${cmd_name}: print documentation about the template packages'''
+        if len(paths) < 1:
+            raise MissingPackageName
         name = paths[0]
         print ''
         print TemplatePackage.pool.get(name).docs
@@ -267,11 +297,11 @@ class App(cmdln.Cmdln):
     @cmdln.alias('ls')
     def do_list(self, subcmd, opts, *paths):
         '''${cmd_name}: list all the available templates'''
-        templates = TemplatePackage.pool.values()
+        templates = [i[1] for i in sorted(TemplatePackage.pool.items())]
         if templates:
             maxlen = max(len(i.name) for i in templates)
             print 'Template packages:\n'
-            print '\n'.join('\t{0:<{maxlen}}\t{1}'.format(i.name, i.docs, maxlen=maxlen) for i in templates)
+            print '\n'.join('\t{0:<{maxlen}}\t\t{1}'.format(i.name, i.docs, maxlen=maxlen) for i in templates)
         else:
             print 'No packages available'
         
