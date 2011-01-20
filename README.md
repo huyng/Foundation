@@ -20,6 +20,7 @@ you need for starting new projects.
         edit (e)         edit a template package in your editor
         help (?)         give detailed help on a specific sub-command
         list (ls)        list all the available templates
+        locate (l)       print the directory location of the template package
         put (p)          create new project from template
         remove (rm)      removes template package from the repository
 
