@@ -84,6 +84,12 @@ Edit the package NAME from your repository
 Reveal package NAME from your repository in Finder
     
     fdn open <NAME>
+    
+**locate**
+
+print the directory location of the template package (use this to quickly jump to the package's directory)
+
+    fdn locate <NAME>
 
 **doc**
 
