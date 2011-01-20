@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import sys
 import cmdln
 import shutil
 import subprocess as SP
@@ -300,7 +301,23 @@ class App(cmdln.Cmdln):
             SP.call('%s %s' % (self.editor, templatepkg.fdnpath), shell=True)
         else:
             SP.call('%s %s' % (self.editor, templatepkg.pkgpath), shell=True)
-        
+    
+    @cmdln.alias('l')
+    def do_locate(self, subcmd, opts, *paths):
+        '''${cmd_name}: print the location of template package. use this to cd into the directory
+
+           ${cmd_option_list}
+        '''
+        if len(paths) < 1:
+            raise MissingPackageName
+
+        # get package
+        name = paths[0]
+        templatepkg = TemplatePackage.pool.get(name)
+        if not templatepkg:
+            raise PackageDoesNotExist(name)
+        sys.stdout.write(templatepkg.pkgpath + '\n')
+    
 
     @cmdln.alias('d')
     def do_doc(self, subcmd, opts, *paths):
