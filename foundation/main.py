@@ -279,7 +279,7 @@ class App(cmdln.Cmdln):
         if len(paths) == 0:
             raise MissingPath
 
-        templatepkg = TemplatePackage.create(name=opts.name, path=path[0], repopath=self.repopath)
+        templatepkg = TemplatePackage.create(name=opts.name, path=paths[0], repopath=self.repopath)
         TemplatePackage.pool[templatepkg.name] = templatepkg
         TemplatePackage.completegen(self.completionspath)
         
