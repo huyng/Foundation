@@ -23,6 +23,9 @@ from errors import ConfigMissing, \
 # Monkey patching os.path module to get the real f-ing path
 P.wtfpath = lambda p: P.abspath(P.expandvars(P.expanduser(p)))
 
+EMPTY_FILE_LOCATION = P.wtfpath('~/.foundation/datafiles/empty_files')
+
+
 def requires_path(fn):
     @wraps(fn)
     def _inner(*args, **kwargs):
@@ -127,6 +130,39 @@ class TemplatePackage(object):
     def remove(self):
         shutil.rmtree(self.pkgpath)
         del TemplatePackage.pool[self.name]
+    
+    @classmethod
+    def create(cls, name, path, repopath):
+        path    = P.wtfpath(path) if path else None
+        name    = slugify(name,'-') if name else  slugify(P.split(path)[-1].strip(),'-')
+        pkgpath = P.join(repopath, name)
+        
+        # check if we've already got the package
+        if name in TemplatePackage.pool:
+            raise NameConflict(name, TemplatePackage.pool[name].pkgpath)
+        
+        # copy files into pkgpath
+        if not path:
+            # start a new file-based template bundle
+            fpath = P.join(pkgpath, name)
+            os.mkdir(pkgpath)
+            shutil.copyfile(EMPTY_FILE_LOCATION, fpath)
+            templatepkg = TemplatePackage(pkgpath=pkgpath, name=name, putpath=name)
+        elif P.isfile(path):
+            # start a new file-based template bundle from existing file
+            fpath = P.join(pkgpath, name)
+            os.mkdir(pkgpath)
+            shutil.copyfile(path, fpath)
+            templatepkg = TemplatePackage(pkgpath=pkgpath, name=name, putpath=name)
+        else:
+            # start a new folder-based template bundle from existing folder
+            shutil.copytree(path, pkgpath)
+            templatepkg = TemplatePackage(pkgpath=pkgpath, name=name, putpath=None)
+
+        templatepkg.save()
+        return templatepkg
+        
+        
         
     @classmethod
     def loadrepo(cls, repopath):
@@ -221,38 +257,33 @@ class App(cmdln.Cmdln):
         templatepkg.browse()
         
     
+    @cmdln.alias('n')
+    @cmdln.option('-n','--name', dest='name', help='a name for the package', required=True)
+    def do_new(self, subcmd, opts, *paths):
+        '''${cmd_name}: add file or folder to your repository of project templates
+        
+        ${cmd_option_list}
+        '''
+        templatepkg = TemplatePackage.create(name=opts.name,path=None, repopath=self.repopath)
+        TemplatePackage.pool[templatepkg.name] = templatepkg
+        TemplatePackage.completegen(self.completionspath)
+        
+    
     @cmdln.alias('a')
     @cmdln.option('-n','--name', dest='name', help='a name for the package', default=None)
     def do_add(self, subcmd, opts, *paths):
         '''${cmd_name}: add file or folder to your repository of project templates
-        
+
         ${cmd_option_list}
         '''
         if len(paths) == 0:
             raise MissingPath
 
-        path    = P.wtfpath(paths[0])
-        name    = slugify(opts.name,'-') if opts.name else  slugify(P.split(path)[-1].strip(),'-')
-        pkgpath = P.join(self.repopath, name)
-        
-        # check if we've already got the package
-        if name in TemplatePackage.pool:
-            raise NameConflict(name, TemplatePackage.pool[name].pkgpath)
-        
-        # copy files into pkgpath
-        if P.isfile(path):
-            fpath = P.join(pkgpath, name)
-            os.mkdir(pkgpath)
-            shutil.copyfile(path, fpath)
-            templatepkg = TemplatePackage(pkgpath=pkgpath, name=name, putpath=name)
-        else:
-            shutil.copytree(path, pkgpath)
-            templatepkg = TemplatePackage(pkgpath=pkgpath, name=name, putpath=None)
-            
-        
-        templatepkg.save()
+        templatepkg = TemplatePackage.create(name=opts.name, path=path[0], repopath=self.repopath)
         TemplatePackage.pool[templatepkg.name] = templatepkg
         TemplatePackage.completegen(self.completionspath)
+        
+    
         
     
     @cmdln.alias('rm')
