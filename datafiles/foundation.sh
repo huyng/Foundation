@@ -4,7 +4,7 @@ function _fdncomplete_()
     local word=${COMP_WORDS[COMP_CWORD]}    # gets the word that's being completed
     local line=${COMP_LINE}                 # gets the entire line being completed
     local xpat                              # custom exclusion pattern
-    local subcommands='add clip compgen open doc edit help list put remove locate new'
+    local subcommands='add clip compgen open doc edit help list put remove locate new bundle'
     
     if [[ $COMP_CWORD -lt 2 ]]; then
         # only complete subcommands when there are less then 3 arguments on cmdline
