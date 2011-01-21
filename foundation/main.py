@@ -258,13 +258,15 @@ class App(cmdln.Cmdln):
         
     
     @cmdln.alias('n')
-    @cmdln.option('-n','--name', dest='name', help='a name for the package', required=True)
     def do_new(self, subcmd, opts, *paths):
         '''${cmd_name}: add file or folder to your repository of project templates
         
         ${cmd_option_list}
         '''
-        templatepkg = TemplatePackage.create(name=opts.name,path=None, repopath=self.repopath)
+        if len(paths) == 0:
+            raise MissingPackageName
+
+        templatepkg = TemplatePackage.create(name=opts.name, path=None, repopath=self.repopath)
         TemplatePackage.pool[templatepkg.name] = templatepkg
         TemplatePackage.completegen(self.completionspath)
         
