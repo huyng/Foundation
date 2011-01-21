@@ -15,14 +15,18 @@ you need for starting new projects.
 
     Commands:
         add (a)          add file or folder to your repository of project templates
-        clip (cc)        copy the contents of file to clipboard 
+        clip (cc)        copy the contents of a file-based bundle to clipboard 
         doc (d)          print documentation about the template packages
         edit (e)         edit a template package in your editor
+        open (o)         open the directory where the package resides
         help (?)         give detailed help on a specific sub-command
         list (ls)        list all the available templates
         locate (l)       print the directory location of the template package
         put (p)          create new project from template
         remove (rm)      removes template package from the repository
+        new (n)          start a new file-based template package
+
+        
 
 ## Getting Started ##
     

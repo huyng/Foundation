@@ -1,0 +1,2 @@
+- Add bundle command for easy sharing
+- Add option to create self boostrapping bundles
