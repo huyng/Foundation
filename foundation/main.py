@@ -8,6 +8,7 @@ import subprocess as SP
 import os.path as P
 import glob as G
 import configobj
+import zipfile
 
 from functools import wraps
 from errors import ConfigMissing, \
@@ -24,6 +25,7 @@ from errors import ConfigMissing, \
 P.wtfpath = lambda p: P.abspath(P.expandvars(P.expanduser(p)))
 
 EMPTY_FILE_LOCATION = P.wtfpath('~/.foundation/empty_file')
+BUNDLE_EXT          = '.fdnbundle.zip'
 
 
 def requires_path(fn):
@@ -47,7 +49,7 @@ class TemplatePackage(object):
         self.pkgpath  = pkgpath
         self.fdnpath  = P.join(pkgpath, '.fdn')
         self.confpath = P.join(self.fdnpath, 'config')
-        self.putpath  = putpath
+        self.putpath  = putpath if putpath != "None" else None
         self.docpath  = P.join(self.fdnpath, 'DESCRIPTION')
 
     
@@ -60,6 +62,7 @@ class TemplatePackage(object):
         
     @property
     def editpath(self):
+        print self.putpath
         return P.join(self.pkgpath, self.putpath) if self.putpath else self.pkgpath
     
     def put(self, dest):
@@ -137,13 +140,29 @@ class TemplatePackage(object):
     
     @classmethod
     def create(cls, name, path, repopath):
+        is_fdnbundle = False
         path    = P.wtfpath(path) if path else None
+        
+        # import bundle from zipfile and delete
+        if path.endswith(BUNDLE_EXT):
+            is_fdnbundle = True
+            orig_path = path
+            zf = zipfile.ZipFile(path)
+            zf.extractall('/tmp/_fdnbundle')
+            path = P.dirname(G.glob('/tmp/_fdnbundle/**/.fdn')[0])
+            conf = configobj.ConfigObj(P.join(path,'.fdn/config'))
+            name = conf['name']
+            
         name    = slugify(name,'-') if name else  slugify(P.split(path)[-1].strip(),'-')
         pkgpath = P.join(repopath, name)
         
         # check if we've already got the package
         if name in TemplatePackage.pool:
+            if is_fdnbundle:
+                os.rmtree('/tmp/_fdnbundle')
             raise NameConflict(name, TemplatePackage.pool[name].pkgpath)
+        
+        
         
         # copy files into pkgpath
         if not path:
@@ -162,7 +181,11 @@ class TemplatePackage(object):
             # start a new folder-based template bundle from existing folder
             shutil.copytree(path, pkgpath)
             templatepkg = TemplatePackage(pkgpath=pkgpath, name=name, putpath=None)
-
+        
+        if is_fdnbundle:
+            os.remove(orig_path)
+            shutil.rmtree('/tmp/_fdnbundle')
+            
         templatepkg.save()
         return templatepkg
         
@@ -274,9 +297,7 @@ class App(cmdln.Cmdln):
         TemplatePackage.pool[templatepkg.name] = templatepkg
         TemplatePackage.completegen(self.completionspath)
         SP.call('%s %s' % (self.editor, templatepkg.editpath), shell=True)
-        
-        
-        
+
     
     @cmdln.alias('a')
     @cmdln.option('-n','--name', dest='name', help='a name for the package', default=None)
