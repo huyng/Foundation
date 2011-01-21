@@ -39,6 +39,15 @@ def slugify(s, char):
     '''removes changes all non [A-Za-z0-9] and changes them to '''
     import re
     return re.sub(r'[^A-Za-z0-9\.\-]+', char, s)
+
+def recursive_zip(zipf, directory, folder = ""):
+    '''create a zipfile from a directory'''
+    for item in os.listdir(directory):
+        if os.path.isfile(os.path.join(directory, item)):
+            zipf.write(os.path.join(directory, item), folder + os.sep + item)
+        elif os.path.isdir(os.path.join(directory, item)):
+            recursive_zip(zipf, os.path.join(directory, item), folder + os.sep + item)
+
     
 class TemplatePackage(object):
     pool = {}
@@ -85,9 +94,12 @@ class TemplatePackage(object):
         
     def browse(self):
         SP.call('open %s' % self.pkgpath, shell=True)
-        
-
-            
+    
+    def build_bundle(self):
+        bundlename = self.name + BUNDLE_EXT
+        packagename = P.split(self.pkgpath)[-1]
+        zf = zipfile.ZipFile(bundlename, 'w')
+        recursive_zip(zf, self.pkgpath, folder=packagename)
 
     
     def save(self):
@@ -406,6 +418,20 @@ class App(cmdln.Cmdln):
             print '\n'.join('\t{0:<{maxlen}}\t\t{1}'.format(i.name, i.docs, maxlen=maxlen) for i in templates)
         else:
             print 'No packages available'
+    
+    def do_bundle(self, subcmd, opts, *paths):
+        """Create a fdn bundle to distribute"""
+        if len(paths) < 1:
+            raise MissingPackageName
+        
+        # get package
+        name = paths[0]
+        templatepkg = TemplatePackage.pool.get(name)
+        if not templatepkg:
+            raise PackageDoesNotExist(name)
+        templatepkg.build_bundle()
+        
+        
         
         
 
