@@ -1,1 +1,3 @@
-If you change this file name then be sure to update it in the .fdn/config file's putpath
+If you change this file's name, remember to also change the "putpath" 
+inside of the .fdn/config file. Otherwise the "fdn put" command will
+not work for this file-based template bundle.
