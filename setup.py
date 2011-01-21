@@ -13,5 +13,6 @@ setup( name='foundation (fdn)',
        data_files=[(LOCAL, ['datafiles/config', 
                             'datafiles/completions', 
                             'datafiles/foundation.sh',
-                            'datafiles/empty_file'])],
+                            'datafiles/empty_file',
+                            'datafiles/packer.sh'])],
        scripts=['scripts/fdn'] )
