@@ -2,11 +2,12 @@
 import sys
 from foundation.main import App
 from foundation.errors import BaseError
+from foundation import termcolor
 
 if __name__ == '__main__':
     app = App()
     try:
         app.main()
     except BaseError, e:
-        print str(e)
+        print termcolor.colored("ERROR : ", 'red', attrs=['bold']) + str(e) 
     sys.exit()

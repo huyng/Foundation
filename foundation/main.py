@@ -17,7 +17,9 @@ from errors import ConfigMissing, \
                    PackageDoesNotExist, \
                    IncompatiablePackage, \
                    MissingPackageName, \
-                   MissingPath
+                   MissingPath, \
+                   HookNotExecutable, \
+                   TargetPathConflict
 
 
 
@@ -28,7 +30,10 @@ EMPTY_FILE_LOCATION = P.wtfpath('~/.foundation/empty_file')
 BUNDLE_EXT          = '.fdnbundle.zip'
 BOOTSTRAPPER        = P.wtfpath('~/.foundation/packer.sh')
 
-
+def info(txt):
+    import termcolor
+    print termcolor.colored('INFO  : ', 'green', attrs=['bold']) + txt
+    
 def requires_path(fn):
     @wraps(fn)
     def _inner(*args, **kwargs):
@@ -78,6 +83,9 @@ class TemplatePackage(object):
     
     def put(self, dest):
         dest = P.wtfpath(dest)
+        if P.exists(dest):
+            raise TargetPathConflict(dest)
+            
         putpath = P.join(self.pkgpath, self.putpath) if self.putpath else self.pkgpath
         if P.isfile(putpath):
             shutil.copyfile(putpath, dest)
@@ -91,7 +99,12 @@ class TemplatePackage(object):
         '''Called after we are done copying files to dest'''
         postput = P.join(self.hookspath, 'post-put')
         if P.exists(postput):
-            SP.call([postput, dest]) 
+            info('running post-put hook found at  "%s"' % postput)
+            try:
+                SP.call([postput, dest]) 
+            except OSError:
+                raise HookNotExecutable(postput)
+             
 
     def pbcopy(self):
         if not self.putpath:
@@ -370,7 +383,7 @@ class App(cmdln.Cmdln):
             templatepkg.remove()
             TemplatePackage.completegen(self.completionspath)
         else:
-            print 'operation canceled'
+            info('operation canceled')
         
         
 

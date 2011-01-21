@@ -32,3 +32,12 @@ class InvalidTemplatePackage(BaseError):
             reason = '(%s) ' % reason
         BaseError.__init__(self, "Invalid Template Package %s%s" % (reason,pkgpath))
 
+class HookNotExecutable(BaseError):
+    def __init__(self, hookpath):
+        BaseError.__init__(self, "The permissions for the hook at '%s' is incorrectly set. Please make it executable." % hookpath)
+
+class TargetPathConflict(BaseError):
+    def __init__(self, target):
+        Exception.__init__(self, "The target path '%s' conflicts with existing files" % target)
+
+
