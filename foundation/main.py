@@ -23,7 +23,7 @@ from errors import ConfigMissing, \
 # Monkey patching os.path module to get the real f-ing path
 P.wtfpath = lambda p: P.abspath(P.expandvars(P.expanduser(p)))
 
-EMPTY_FILE_LOCATION = P.wtfpath('~/.foundation/datafiles/empty_files')
+EMPTY_FILE_LOCATION = P.wtfpath('~/.foundation/empty_file')
 
 
 def requires_path(fn):
@@ -57,6 +57,10 @@ class TemplatePackage(object):
         d = f.read()
         f.close()
         return d
+        
+    @property
+    def editpath(self):
+        return P.join(self.pkgpath, self.putpath) if self.putpath else self.pkgpath
     
     def put(self, dest):
         dest = P.wtfpath(dest)
@@ -253,7 +257,6 @@ class App(cmdln.Cmdln):
         templatepkg = TemplatePackage.pool.get(name)
         if not templatepkg:
             raise PackageDoesNotExist(name)
-            
         templatepkg.browse()
         
     
@@ -265,10 +268,14 @@ class App(cmdln.Cmdln):
         '''
         if len(paths) == 0:
             raise MissingPackageName
+        name = paths[0]
 
-        templatepkg = TemplatePackage.create(name=opts.name, path=None, repopath=self.repopath)
+        templatepkg = TemplatePackage.create(name=name, path=None, repopath=self.repopath)
         TemplatePackage.pool[templatepkg.name] = templatepkg
         TemplatePackage.completegen(self.completionspath)
+        SP.call('%s %s' % (self.editor, templatepkg.editpath), shell=True)
+        
+        
         
     
     @cmdln.alias('a')
@@ -333,7 +340,7 @@ class App(cmdln.Cmdln):
         if opts.config:
             SP.call('%s %s' % (self.editor, templatepkg.fdnpath), shell=True)
         else:
-            SP.call('%s %s' % (self.editor, templatepkg.pkgpath), shell=True)
+            SP.call('%s %s' % (self.editor, templatepkg.editpath), shell=True)
     
     @cmdln.alias('l')
     def do_locate(self, subcmd, opts, *paths):
