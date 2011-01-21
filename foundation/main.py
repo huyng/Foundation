@@ -26,6 +26,7 @@ P.wtfpath = lambda p: P.abspath(P.expandvars(P.expanduser(p)))
 
 EMPTY_FILE_LOCATION = P.wtfpath('~/.foundation/empty_file')
 BUNDLE_EXT          = '.fdnbundle.zip'
+BOOTSTRAPPER        = P.wtfpath('~/.foundation/packer.sh')
 
 
 def requires_path(fn):
@@ -95,11 +96,21 @@ class TemplatePackage(object):
     def browse(self):
         SP.call('open %s' % self.pkgpath, shell=True)
     
-    def build_bundle(self):
+    def build_bundle(self, bootstrap_mode=False):
+        '''freezes the package into a zip file called fdnbundle'''
         bundlename = self.name + BUNDLE_EXT
         packagename = P.split(self.pkgpath)[-1]
         zf = zipfile.ZipFile(bundlename, 'w')
         recursive_zip(zf, self.pkgpath, folder=packagename)
+        zf.close()
+        if bootstrap_mode:
+            packer = open(BOOTSTRAPPER).read()
+            zipdata = open(bundlename).read()
+            finaldata = packer + '\n' + zipdata
+            bundle = open(bundlename,'w')
+            bundle.write(finaldata)
+            bundle.close()
+        
 
     
     def save(self):
@@ -171,7 +182,7 @@ class TemplatePackage(object):
         # check if we've already got the package
         if name in TemplatePackage.pool:
             if is_fdnbundle:
-                os.rmtree('/tmp/_fdnbundle')
+                shutil.rmtree('/tmp/_fdnbundle')
             raise NameConflict(name, TemplatePackage.pool[name].pkgpath)
         
         
@@ -418,7 +429,9 @@ class App(cmdln.Cmdln):
             print '\n'.join('\t{0:<{maxlen}}\t\t{1}'.format(i.name, i.docs, maxlen=maxlen) for i in templates)
         else:
             print 'No packages available'
-    
+
+    @cmdln.option('-b', '--bootstrap', action='store_true', dest='bootstrap', default=False, 
+                   help='If this is turned on, then a bootstrap script will be included with fdnbundle')
     def do_bundle(self, subcmd, opts, *paths):
         """Create a fdn bundle to distribute"""
         if len(paths) < 1:
@@ -429,7 +442,7 @@ class App(cmdln.Cmdln):
         templatepkg = TemplatePackage.pool.get(name)
         if not templatepkg:
             raise PackageDoesNotExist(name)
-        templatepkg.build_bundle()
+        templatepkg.build_bundle(opts.bootstrap)
         
         
         
