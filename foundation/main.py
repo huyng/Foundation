@@ -61,6 +61,7 @@ class TemplatePackage(object):
         self.confpath = P.join(self.fdnpath, 'config')
         self.putpath  = putpath if putpath != "None" else None
         self.docpath  = P.join(self.fdnpath, 'DESCRIPTION')
+        self.hookspath = P.join(self.fdnpath, 'hooks')
 
     
     @property
@@ -82,6 +83,15 @@ class TemplatePackage(object):
             shutil.copyfile(putpath, dest)
         else:
             shutil.copytree(putpath, dest, ignore=shutil.ignore_patterns('*.fdn'))
+        
+        # Perform post-put processing
+        self._post_put(dest)
+    
+    def _post_put(self, dest):
+        '''Called after we are done copying files to dest'''
+        postput = P.join(self.hookspath, 'post-put')
+        if P.exists(postput):
+            SP.call([postput, dest]) 
 
     def pbcopy(self):
         if not self.putpath:
@@ -386,8 +396,8 @@ class App(cmdln.Cmdln):
         else:
             SP.call('%s %s' % (self.editor, templatepkg.editpath), shell=True)
     
-    @cmdln.alias('l')
-    def do_locate(self, subcmd, opts, *paths):
+    @cmdln.alias('cd')
+    def do_cdpath(self, subcmd, opts, *paths):
         '''${cmd_name}: print the location of template package. use this to cd into the directory
 
            ${cmd_option_list}
