@@ -1,8 +1,3 @@
-[TOC]
-
-## hello ##
-
-
 ## About Foundation ##
 
 Foundation is a scaffolding tool. It tracks your often-used project templates, code snippets and other 
@@ -54,9 +49,10 @@ you need for starting new projects.
 
 
 
-## Usage Reference ##
+## Collecting new bundles for your repository ##
 
-**add**
+
+**add**   
 
 Adds a DIRECTORY or FILE path to your personal repository of code snippets and project templates
 
@@ -124,7 +120,7 @@ Print help message for the given COMMAND
 - Each **.fdn** directory contains a *config* file which has settings such as the "name" of a package and the files that should be copied when using the `put` command.
 - Each **.fdn** directory contains a *DESCRIPTION* file which contains the description to be printed out when using the `doc` command.
 
-# License #
+## License ##
 
 Copyright (C) Huy Nguyen 2011 
 
@@ -134,6 +130,4 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-
-    
 

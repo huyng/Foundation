@@ -5,8 +5,7 @@
 <title>Foundation (FDN) Tool Documentation - Every great project starts with solid foundation</title>
 
 <link rel="stylesheet" href="base.css" type="text/css" />
-<!-- <link rel="stylesheet" href="debug.css" type="text/css" /> -->
-<!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<!-- <link rel="stylesheet" href="debug.css" type="text/css" media="screen" title="no title" charset="utf-8"> -->
 <style type="text/css" media="screen">
     .container {
         margin:5em;
@@ -16,12 +15,15 @@
     h2,h3,h4,h5,h6{
         margin-top:1em;
     }
+    
+    div.codehilite {margin-bottom:1.43em;}
+    * div.codehilite:last-child {margin-bottom:0;}
+    
     pre {
         border:1px solid #eee;
         border-left:2px solid #eee;
         background:ghostWhite;
         padding: 5px;
-        
     }
     #watermark {
         margin-bottom:3em;
@@ -54,6 +56,8 @@
                 <p id="tagline">Type your boilerplate code once and only once</p>
             </div>
         </div><!-- /#watermark -->
+        <div class="clear"></div>
+        {{toc}}
         <div class="clear"></div>
         {{content}}
     </div>

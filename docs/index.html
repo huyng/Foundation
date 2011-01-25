@@ -5,8 +5,7 @@
 <title>Foundation (FDN) Tool Documentation - Every great project starts with solid foundation</title>
 
 <link rel="stylesheet" href="base.css" type="text/css" />
-<!-- <link rel="stylesheet" href="debug.css" type="text/css" /> -->
-<!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<!-- <link rel="stylesheet" href="debug.css" type="text/css" media="screen" title="no title" charset="utf-8"> -->
 <style type="text/css" media="screen">
     .container {
         margin:5em;
@@ -16,12 +15,15 @@
     h2,h3,h4,h5,h6{
         margin-top:1em;
     }
+    
+    div.codehilite {margin-bottom:1.43em;}
+    * div.codehilite:last-child {margin-bottom:0;}
+    
     pre {
         border:1px solid #eee;
         border-left:2px solid #eee;
         background:ghostWhite;
         padding: 5px;
-        
     }
     #watermark {
         margin-bottom:3em;
@@ -55,20 +57,17 @@
             </div>
         </div><!-- /#watermark -->
         <div class="clear"></div>
-        <div class="toc">
-<ul>
-<li><a href="#hello">hello</a><ul>
-<li><a href="#about-foundation">About Foundation</a></li>
-<li><a href="#getting-started">Getting Started</a></li>
-<li><a href="#usage-reference">Usage Reference</a></li>
-<li><a href="#configuration">Configuration</a></li>
+        <ul>
+<li><a href='#about-foundation'>About Foundation</a></li>
+<li><a href='#getting-started'>Getting Started</a></li>
+<li><a href='#collecting-new-bundles-for-your-repository'>Collecting new bundles for your repository</a></li>
+<li><a href='#configuration'>Configuration</a></li>
+<li><a href='#license'>License</a></li>
 </ul>
-</li>
-<li><a href="#license">License</a></li>
 </ul>
-</div>
-<h2 id="hello">hello</h2>
-<h2 id="about-foundation">About Foundation</h2>
+
+        <div class="clear"></div>
+        <h2 id="about-foundation">About Foundation</h2>
 <p>Foundation is a scaffolding tool. It tracks your often-used project templates, code snippets and other 
 boilerplate in an easy-to-use commandline app. With a single command, generate exactly the source code
 you need for starting new projects.</p>
@@ -115,8 +114,9 @@ you need for starting new projects.</p>
 </pre></div>
 
 
-<h2 id="usage-reference">Usage Reference</h2>
-<p><strong>add</strong></p>
+<h2 id="collecting-new-bundles-for-your-repository">Collecting new bundles for your repository</h2>
+<p><strong>add</strong> <br />
+</p>
 <p>Adds a DIRECTORY or FILE path to your personal repository of code snippets and project templates</p>
 <div class="codehilite"><pre><span class="n">fdn</span> <span class="n">add</span> <span class="sr">&lt;DIRECTORY&gt;</span> <span class="o">|</span> <span class="sr">&lt;FILE&gt;</span>
 </pre></div>
@@ -184,7 +184,7 @@ you need for starting new projects.</p>
 <li>Each <strong>.fdn</strong> directory contains a <em>config</em> file which has settings such as the "name" of a package and the files that should be copied when using the <code>put</code> command.</li>
 <li>Each <strong>.fdn</strong> directory contains a <em>DESCRIPTION</em> file which contains the description to be printed out when using the <code>doc</code> command.</li>
 </ul>
-<h1 id="license">License</h1>
+<h2 id="license">License</h2>
 <p>Copyright (C) Huy Nguyen 2011 </p>
 <p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.</p>
 <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>

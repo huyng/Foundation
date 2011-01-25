@@ -9,7 +9,7 @@ aside, nav, article, figure {
 body {
 	background: #fff;
 	color: #000305;
-	font-size: 87.5%; /* Base font size: 14px */
+	font-size: 13px; /* Base font size: 14px */
 	font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 	line-height: 1.429;
 	margin: 0;
@@ -75,6 +75,15 @@ blockquote {font-style: italic;}
 cite {}
 
 q {}
+
+pre { 
+    margin-bottom: 1.143em;
+    font-family:"Andale Mono", monaco,consolas;
+    font-size: .95em;
+}
+* pre:last-child { 
+    margin-bottom: 0px;
+}
 
 /* Tables */
 table {margin: .5em auto 1.5em auto; width: 98%;}
