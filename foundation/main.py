@@ -451,8 +451,12 @@ class App(cmdln.Cmdln):
             maxlen = max(len(i.name) for i in templates)
             termheight, termwidth = utils.termsize()
             doclen = termwidth - (maxlen + 8 + 8 + 8 )
+            ellipsify = lambda x: ' ..' * (1 if len(x) > doclen else 0)
             print 'Template packages:\n'
-            print '\n'.join('\t{0:<{maxlen}}\t{1}'.format(i.name, i.docs[:doclen] + (' ..' * (1 if len(i.docs) > doclen else 0)), maxlen=maxlen) for i in templates)
+            print '\n'.join('\t{0:<{maxlen}}\t{1}'.format(
+                i.name, 
+                i.docs[:doclen] + ellipsify(i.docs), 
+                maxlen=maxlen) for i in templates)
         else:
             print 'No packages available'
 
