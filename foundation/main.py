@@ -9,6 +9,7 @@ import os.path as P
 import glob as G
 import configobj
 import zipfile
+import utils
 
 from functools import wraps
 from errors import ConfigMissing, \
@@ -448,8 +449,10 @@ class App(cmdln.Cmdln):
         templates = [i[1] for i in sorted(TemplatePackage.pool.items())]
         if templates:
             maxlen = max(len(i.name) for i in templates)
+            termheight, termwidth = utils.termsize()
+            doclen = termwidth - (maxlen + 8 + 8 + 8 )
             print 'Template packages:\n'
-            print '\n'.join('\t{0:<{maxlen}}\t\t{1}'.format(i.name, i.docs, maxlen=maxlen) for i in templates)
+            print '\n'.join('\t{0:<{maxlen}}\t{1}'.format(i.name, i.docs[:doclen] + (' ..' * (1 if len(i.docs) > doclen else 0)), maxlen=maxlen) for i in templates)
         else:
             print 'No packages available'
 
