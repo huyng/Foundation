@@ -9,7 +9,7 @@ aside, nav, article, figure {
 body {
 	background: #fff;
 	color: #000305;
-	font-size: 13px; /* Base font size: 14px */
+	font-size: 13px; /* Base font size: 13px */
 	font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 	line-height: 1.429;
 	margin: 0;
@@ -78,7 +78,7 @@ q {}
 
 pre { 
     margin-bottom: 1.143em;
-    font-family:"Andale Mono", monaco,consolas;
+    font-family:"Andale Mono", "Monaco", "Consolas", monospace;
     font-size: .95em;
 }
 * pre:last-child { 

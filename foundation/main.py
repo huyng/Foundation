@@ -90,7 +90,7 @@ class TemplatePackage(object):
         if P.isfile(putpath):
             shutil.copyfile(putpath, dest)
         else:
-            shutil.copytree(putpath, dest, ignore=shutil.ignore_patterns('*.fdn'))
+            shutil.copytree(putpath, dest, ignore=shutil.ignore_patterns('*.fdn', '*.pyc','*.git','*.svn'))
         
         # Perform post-put processing
         self._post_put(dest)
