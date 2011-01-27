@@ -203,7 +203,6 @@ Copy the contents of a bundle package `<NAME>` into clipboard (must be file base
         fdn clip my-snippets-file
 
 
-
 ## Configuration ##
 
 - All relevant files for this command live under **~/.foundation/**. 
@@ -213,7 +212,11 @@ Copy the contents of a bundle package `<NAME>` into clipboard (must be file base
 - Each **.fdn** directory contains a *DESCRIPTION* file which contains the description to be printed out when using the `doc` command.
 - Each **.fdn** directory optionally contains a *hooks* directory where you can place scripts that FDN will execute during certain events. FDN currently only supports the "post-put" hook. 
 
+## Related Pages ##
 
+- [FDN Project Homepage](http://www.huyng.com/projects/fdn/)
+- [FDN Github Repository](https://github.com/huyng/Foundation)
+- [Author's Homepage](http://www.huyng.com)
 
 ## License ##
 
