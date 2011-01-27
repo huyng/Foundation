@@ -4,121 +4,216 @@ Foundation is a scaffolding tool. It tracks your often-used project templates, c
 boilerplate in an easy-to-use commandline app. With a single command, generate exactly the source code
 you need for starting new projects.
 
+**Features:**
+
+- Tab completion
+- Post processing hooks
+- No-hassle editing - so your code will always stay up-to-date
+- Bundling - easily package your code to distribute to others
+
+**Usage:**
+ 
     Usage:
         fdn COMMAND [ARGS...]
         fdn help [COMMAND]
-
+        
     Options:
         -h, --help  show this help message and exit
-
-    Commands:
-        add (a)          add file or folder to your repository of project templates
-        clip (cc)        copy the contents of a file-based bundle to clipboard 
-        doc (d)          print documentation about the template packages
-        edit (e)         edit a template package in your editor
-        open (o)         open the directory where the package resides
-        help (?)         give detailed help on a specific sub-command
-        list (ls)        list all the available templates
-        locate (l)       print the directory location of the template package
-        put (p)          create new project from template
-        remove (rm)      removes template package from the repository
-        new (n)          start a new file-based template package
-
         
+    Commands:
+        add (a)        add file or folder to your repository of project templates
+        bundle         Create a fdn bundle to distribute
+        cdpath (cd)    print the location of template package. use this to cd i...
+        clip (cc)      copy the contents to clipboard (only valid for file temp...
+        doc (d)        print documentation about the template packages
+        edit (e)       edit a template package in your editor
+        help (?)       give detailed help on a specific sub-command
+        list (ls)      list all the available templates
+        new (n)        add file or folder to your repository of project templates
+        open (o)       copy the contents to clipboard (only valid for file temp...
+        put (p)        create new project from template
+        remove (rm)    removes template package from the repository
+    
 
 ## Getting Started ##
     
-    # Download source
+**Installation**
+
     git clone git://github.com/huyng/Foundation.git
     
-    # Install
+    cd Foundation
     python setup.py install --user
     
     # Add this to your .bashrc or .profile
     source ~/.foundation/foundation.sh
     
-    # Create sample package and add to repository
-    mkdir samplepackage
-    echo "hello world" > samplepackage/test.txt
-    fdn add samplepackage
+**Example Usage**
+
+Create sample bundle and add to repository
+
+    mkdir newproject
+    echo 'hello world' > newproject/foobar.txt
+    fdn add newproject --name "fdn-hello-world"
     
-    # Generate a new project from previously added scaffold
-    cd /tmp
-    fdn put samplepackage samplepackage2
+Generate a new project from previously added bundle
+
+    fdn put fdn-hello-world /tmp/helloworld
+
+Edit your bundle
+    
+    fdn edit fdn-hello-world
+
+Remove the bundle
+    
+    fdn rm fdn-hello-world
     
 
+## Command Reference ##
 
-
-## Collecting new bundles for your repository ##
-
-
-**add**   
+#### add (a) ####
 
 Adds a DIRECTORY or FILE path to your personal repository of code snippets and project templates
-
-    fdn add <DIRECTORY> | <FILE>
-
-**put**
-
-Copies the package NAME from your personal repository into the given PATH
-
-    fdn put <NAME> <PATH>
     
-**list**
-
-List the packages available in your repository
-
-    fdn ls
-
-**remove**
-
-Removes the package NAME from your repository
+    Usage:
+        fdn add <DIRECTORY> | <FILE> | <FDNBUNDLE>
     
-    fdn remove <NAME>
+    Options:
+        -n NAME, --name=NAME
+                            a name for the package (defaults to the folder or file name)
+
+    Example:
+                                    
+        fdn add MyNewDjangoProject -n "django-hello-world"
+        
+        fdn add snippets.txt
+        
+        fdn add kylesproject.fdnbundle
+
+#### new (n) ####
+
+Creates a new file-based bundle package and opens up in your editor.
+
+    Usage:
+        fdn new `<NAME>` 
     
-**edit**
-
-Edit the package NAME from your repository
+    Example:
     
-    fdn edit <NAME>
+        fdn new your-new-bundle-name
+
+#### put (p) ####
+
+Copies the bundle `<NAME>` from your personal repository into the given `<PATH>`. 
     
-**open**
-
-Reveal package NAME from your repository in Finder
+    Usage:
+        fdn put <NAME> <PATH>
     
-    fdn open <NAME>
+    Example:
+        
+        fdn put django-hello-world /tmp/newproject
     
-**locate**
+#### list (ls) ####
 
-print the directory location of the template package (use this to quickly jump to the package's directory)
-
-    fdn locate <NAME>
-
-**doc**
-
-Print the documentation for the package <NAME>
-
-    fdn doc <NAME>
+List all available bundles in your repository
     
-**clip**
+    Usage:
+        fdn list
 
-Copy the contents of a package into clipboard (must be file based not directory based)
+#### remove (rm) ####
 
-    fdn clip <NAME>
+Removes the package `<NAME>` from your repository
+    
+    Usage:
+        fdn remove <NAME>
+    
+    Example:
+    
+        fdn rm crufty-piece-of-code
+    
+#### edit (e) ####
 
-**help**
+Opens the bundle package `<NAME>` from your repository in your editor of choice.
+    
+    Usage:
+        fdn edit <NAME>
+    
+    Options:
+        -c, --config  Edit the configuration file for template package
+    
+    Example:
+    
+        fdn edit myproject
+        
+        fdn edit myproject -c
+    
+#### open (o) ####
 
-Print help message for the given COMMAND
+Reveal package `<NAME>` from your repository in Finder
+    
+    Usage:
+        fdn open <NAME>
+    
+    Example:
+    
+        fdn edit myproject
 
-    fdn help <COMMAND> 
+
+#### bundle ####
+
+Packages the bundle `<NAME>` from your repository into zip file that you can distribute to other developers
+
+    Usage:
+        fdn bundle `<NAME>`
+    
+    Example:
+        
+        fdn bundle yourproject
+    
+
+#### cdpath (cd) ####
+
+Print the directory location of the bundle package `<NAME>`. Use this to quickly jump to the package's directory.
+    
+    Usage:
+        fdn cdpath <NAME>
+    
+    Example:
+        
+        cd `fdn cdpath myproject`
+        
+#### doc (d) ####
+
+Print the documentation for the package <NAME> that is stored in its DESCRIPTION file
+    
+    Usage:
+        fdn doc <NAME>
+    
+    Example:
+    
+        fdn doc myproject
+    
+#### clip (cc) ####
+
+Copy the contents of a bundle package `<NAME>` into clipboard (must be file based not directory based)
+
+    Usage:
+        fdn clip <NAME>
+    
+    Example:
+    
+        fdn clip my-snippets-file
+
+
 
 ## Configuration ##
 
 - All relevant files for this command live under **~/.foundation/**. 
-- All template packages are folders that reside in **~/.foundation/repository**.
-- All template packages contain an **.fdn** direcotry 
+- All bundle packages are folders that reside in **~/.foundation/repository**.
+- All bundle packages contain an **.fdn** direcotry 
 - Each **.fdn** directory contains a *config* file which has settings such as the "name" of a package and the files that should be copied when using the `put` command.
 - Each **.fdn** directory contains a *DESCRIPTION* file which contains the description to be printed out when using the `doc` command.
+- Each **.fdn** directory optionally contains a *hooks* directory where you can place scripts that FDN will execute during certain events. FDN currently only supports the "post-put" hook. 
+
+
 
 ## License ##
 

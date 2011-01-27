@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <title>Foundation (FDN) Tool Documentation - Every great project starts with solid foundation</title>
 
-<link rel="stylesheet" href="base.css" type="text/css" />
+<link rel="stylesheet" href="static/base.css" type="text/css" />
 <!-- <link rel="stylesheet" href="debug.css" type="text/css" media="screen" title="no title" charset="utf-8"> -->
 <style type="text/css" media="screen">
     .container {
@@ -13,7 +13,7 @@
     }
 
     h2,h3,h4,h5,h6{
-        margin-top:1em;
+        margin-top:4em;
     }
     
     div.codehilite {margin-bottom:1.43em;}
@@ -50,145 +50,20 @@
 <body id="index" class="home">
     <div class="container">
         <div id="watermark">        
-            <img class="logo" src="logo.png">
+            <img class="logo" src="static/logo.png">
             <div id="title">
                 <h1 id="foundationfdn">Foundation Tool (fdn)</h1>
                 <p id="tagline">Type your boilerplate code once and only once</p>
             </div>
         </div><!-- /#watermark -->
+        
+        <!-- table of contents -->
         <div class="clear"></div>
-        <ul>
-<li><a href='#about-foundation'>About Foundation</a></li>
-<li><a href='#getting-started'>Getting Started</a></li>
-<li><a href='#collecting-new-bundles-for-your-repository'>Collecting new bundles for your repository</a></li>
-<li><a href='#configuration'>Configuration</a></li>
-<li><a href='#license'>License</a></li>
-</ul>
-</ul>
-
+        {{toc}}
+        
+        <!-- documentation  -->
         <div class="clear"></div>
-        <h2 id="about-foundation">About Foundation</h2>
-<p>Foundation is a scaffolding tool. It tracks your often-used project templates, code snippets and other 
-boilerplate in an easy-to-use commandline app. With a single command, generate exactly the source code
-you need for starting new projects.</p>
-<div class="codehilite"><pre><span class="err">Usage:</span>
-    <span class="err">fdn</span> <span class="err">COMMAND</span> <span class="err">[ARGS...]</span>
-    <span class="err">fdn</span> <span class="err">help</span> <span class="err">[COMMAND]</span>
-
-<span class="err">Options:</span>
-    <span class="err">-h,</span> <span class="err">--help</span>  <span class="err">show</span> <span class="err">this</span> <span class="err">help</span> <span class="err">message</span> <span class="err">and</span> <span class="err">exit</span>
-
-<span class="err">Commands:</span>
-    <span class="err">add</span> <span class="err">(a)</span>          <span class="err">add</span> <span class="err">file</span> <span class="err">or</span> <span class="err">folder</span> <span class="err">to</span> <span class="err">your</span> <span class="err">repository</span> <span class="err">of</span> <span class="err">project</span> <span class="err">templates</span>
-    <span class="err">clip</span> <span class="err">(cc)</span>        <span class="err">copy</span> <span class="err">the</span> <span class="err">contents</span> <span class="err">of</span> <span class="err">a</span> <span class="err">file-based</span> <span class="err">bundle</span> <span class="err">to</span> <span class="err">clipboard</span> 
-    <span class="err">doc</span> <span class="err">(d)</span>          <span class="err">print</span> <span class="err">documentation</span> <span class="err">about</span> <span class="err">the</span> <span class="err">template</span> <span class="err">packages</span>
-    <span class="err">edit</span> <span class="err">(e)</span>         <span class="err">edit</span> <span class="err">a</span> <span class="err">template</span> <span class="err">package</span> <span class="err">in</span> <span class="err">your</span> <span class="err">editor</span>
-    <span class="err">open</span> <span class="err">(o)</span>         <span class="err">open</span> <span class="err">the</span> <span class="err">directory</span> <span class="err">where</span> <span class="err">the</span> <span class="err">package</span> <span class="err">resides</span>
-    <span class="err">help</span> <span class="err">(?)</span>         <span class="err">give</span> <span class="err">detailed</span> <span class="err">help</span> <span class="err">on</span> <span class="err">a</span> <span class="err">specific</span> <span class="err">sub-command</span>
-    <span class="err">list</span> <span class="err">(ls)</span>        <span class="err">list</span> <span class="err">all</span> <span class="err">the</span> <span class="err">available</span> <span class="err">templates</span>
-    <span class="err">locate</span> <span class="err">(l)</span>       <span class="err">print</span> <span class="err">the</span> <span class="err">directory</span> <span class="err">location</span> <span class="err">of</span> <span class="err">the</span> <span class="err">template</span> <span class="err">package</span>
-    <span class="err">put</span> <span class="err">(p)</span>          <span class="err">create</span> <span class="err">new</span> <span class="err">project</span> <span class="err">from</span> <span class="err">template</span>
-    <span class="err">remove</span> <span class="err">(rm)</span>      <span class="err">removes</span> <span class="err">template</span> <span class="err">package</span> <span class="err">from</span> <span class="err">the</span> <span class="err">repository</span>
-    <span class="err">new</span> <span class="err">(n)</span>          <span class="err">start</span> <span class="err">a</span> <span class="err">new</span> <span class="err">file-based</span> <span class="err">template</span> <span class="err">package</span>
-</pre></div>
-
-
-<h2 id="getting-started">Getting Started</h2>
-<div class="codehilite"><pre><span class="c1"># Download source</span>
-<span class="n">git</span> <span class="n">clone</span> <span class="n">git:</span><span class="sr">//gi</span><span class="n">thub</span><span class="o">.</span><span class="n">com</span><span class="sr">/huyng/</span><span class="n">Foundation</span><span class="o">.</span><span class="n">git</span>
-
-<span class="c1"># Install</span>
-<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span>
-
-<span class="c1"># Add this to your .bashrc or .profile</span>
-<span class="n">source</span> <span class="o">~</span><span class="sr">/.foundation/</span><span class="n">foundation</span><span class="o">.</span><span class="n">sh</span>
-
-<span class="c1"># Create sample package and add to repository</span>
-<span class="nb">mkdir</span> <span class="n">samplepackage</span>
-<span class="n">echo</span> <span class="s">&quot;hello world&quot;</span> <span class="o">&gt;</span> <span class="n">samplepackage</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">txt</span>
-<span class="n">fdn</span> <span class="n">add</span> <span class="n">samplepackage</span>
-
-<span class="c1"># Generate a new project from previously added scaffold</span>
-<span class="n">cd</span> <span class="o">/</span><span class="n">tmp</span>
-<span class="n">fdn</span> <span class="n">put</span> <span class="n">samplepackage</span> <span class="n">samplepackage2</span>
-</pre></div>
-
-
-<h2 id="collecting-new-bundles-for-your-repository">Collecting new bundles for your repository</h2>
-<p><strong>add</strong> <br />
-</p>
-<p>Adds a DIRECTORY or FILE path to your personal repository of code snippets and project templates</p>
-<div class="codehilite"><pre><span class="n">fdn</span> <span class="n">add</span> <span class="sr">&lt;DIRECTORY&gt;</span> <span class="o">|</span> <span class="sr">&lt;FILE&gt;</span>
-</pre></div>
-
-
-<p><strong>put</strong></p>
-<p>Copies the package NAME from your personal repository into the given PATH</p>
-<div class="codehilite"><pre><span class="n">fdn</span> <span class="n">put</span> <span class="sr">&lt;NAME&gt;</span> <span class="sr">&lt;PATH&gt;</span>
-</pre></div>
-
-
-<p><strong>list</strong></p>
-<p>List the packages available in your repository</p>
-<div class="codehilite"><pre><span class="n">fdn</span> <span class="n">ls</span>
-</pre></div>
-
-
-<p><strong>remove</strong></p>
-<p>Removes the package NAME from your repository</p>
-<div class="codehilite"><pre><span class="n">fdn</span> <span class="n">remove</span> <span class="sr">&lt;NAME&gt;</span>
-</pre></div>
-
-
-<p><strong>edit</strong></p>
-<p>Edit the package NAME from your repository</p>
-<div class="codehilite"><pre><span class="n">fdn</span> <span class="n">edit</span> <span class="sr">&lt;NAME&gt;</span>
-</pre></div>
-
-
-<p><strong>open</strong></p>
-<p>Reveal package NAME from your repository in Finder</p>
-<div class="codehilite"><pre><span class="n">fdn</span> <span class="nb">open</span> <span class="sr">&lt;NAME&gt;</span>
-</pre></div>
-
-
-<p><strong>locate</strong></p>
-<p>print the directory location of the template package (use this to quickly jump to the package's directory)</p>
-<div class="codehilite"><pre><span class="n">fdn</span> <span class="n">locate</span> <span class="sr">&lt;NAME&gt;</span>
-</pre></div>
-
-
-<p><strong>doc</strong></p>
-<p>Print the documentation for the package <NAME></p>
-<div class="codehilite"><pre><span class="n">fdn</span> <span class="n">doc</span> <span class="sr">&lt;NAME&gt;</span>
-</pre></div>
-
-
-<p><strong>clip</strong></p>
-<p>Copy the contents of a package into clipboard (must be file based not directory based)</p>
-<div class="codehilite"><pre><span class="n">fdn</span> <span class="n">clip</span> <span class="sr">&lt;NAME&gt;</span>
-</pre></div>
-
-
-<p><strong>help</strong></p>
-<p>Print help message for the given COMMAND</p>
-<div class="codehilite"><pre><span class="n">fdn</span> <span class="n">help</span> <span class="sr">&lt;COMMAND&gt;</span>
-</pre></div>
-
-
-<h2 id="configuration">Configuration</h2>
-<ul>
-<li>All relevant files for this command live under <strong>~/.foundation/</strong>. </li>
-<li>All template packages are folders that reside in <strong>~/.foundation/repository</strong>.</li>
-<li>All template packages contain an <strong>.fdn</strong> direcotry </li>
-<li>Each <strong>.fdn</strong> directory contains a <em>config</em> file which has settings such as the "name" of a package and the files that should be copied when using the <code>put</code> command.</li>
-<li>Each <strong>.fdn</strong> directory contains a <em>DESCRIPTION</em> file which contains the description to be printed out when using the <code>doc</code> command.</li>
-</ul>
-<h2 id="license">License</h2>
-<p>Copyright (C) Huy Nguyen 2011 </p>
-<p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.</p>
-<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
-<p>You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</p>
+        {{content}}
     </div>
 </body>
 </html>
