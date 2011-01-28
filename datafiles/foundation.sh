@@ -16,6 +16,15 @@ function _fdncomplete_()
         COMPREPLY=($(compgen -f -d -X '.[^./]*' -W  "$(cat ~/.foundation/completions)" -- "${word}"))
     fi
 }
+function _fdncd_complete_()
+{
+    local word=${COMP_WORDS[COMP_CWORD]}    # gets the word that's being completed
+    COMPREPLY=($(compgen -X '.[^./]*' -W  "$(cat ~/.foundation/completions)" -- "${word}"))
+}
+function fdncd()
+{
+    cd "$(fdn cdpath $@)"
+}
 
 # -d means include directories
 # -f means include files
@@ -23,3 +32,4 @@ function _fdncomplete_()
 # -F use a function
 # -W a word list ie -W "`cat ~/.iqe/deployment.completions`"
 complete -F _fdncomplete_ fdn
+complete -F _fdncd_complete_ fdncd
