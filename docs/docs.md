@@ -180,7 +180,7 @@ Print the directory location of the bundle package `<NAME>`. Use this to quickly
         
         cd `fdn cdpath myproject`
 
-There's a bash function that you can use that is equivalent to the above command. 
+There's also a bash function that you can use that is equivalent to the above command. 
     
     fdncd <NAME>
         
