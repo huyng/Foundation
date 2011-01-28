@@ -179,6 +179,10 @@ Print the directory location of the bundle package `<NAME>`. Use this to quickly
     Example:
         
         cd `fdn cdpath myproject`
+
+There's a bash function that you can use that is equivalent to the above command. 
+    
+    fdncd <NAME>
         
 #### doc (d) ####
 
