@@ -164,9 +164,16 @@ Packages the bundle `<NAME>` from your repository into zip file that you can dis
     Usage:
         fdn bundle `<NAME>`
     
+    Options:
+        -b, --bootstrap  Include bootstrapping code which will install fdn and
+                         automatically add your bundle to the user's repository
     Example:
-        
+
+        # creates a bundle called yourproject.fdnbundle.zip
         fdn bundle yourproject
+        
+        # makes a self installing fdnbundle
+        fdn bundle yourproject -b
     
 
 #### cdpath (cd) ####

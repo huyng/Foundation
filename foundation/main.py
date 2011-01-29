@@ -461,7 +461,7 @@ class App(cmdln.Cmdln):
             print 'No packages available'
 
     @cmdln.option('-b', '--bootstrap', action='store_true', dest='bootstrap', default=False, 
-                   help="Include bootstrapping code which will install fdn and automatically add your bundle to the user's repository")
+                   help="include bootstrapping code which will install fdn and automatically add your bundle to the user's repository")
     def do_bundle(self, subcmd, opts, *paths):
         """Create a fdn bundle to distribute
         
