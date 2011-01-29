@@ -165,7 +165,7 @@ Packages the bundle `<NAME>` from your repository into zip file that you can dis
         fdn bundle `<NAME>`
     
     Options:
-        -b, --bootstrap  Include bootstrapping code which will install fdn and
+        -b, --bootstrap  include bootstrapping code that will install fdn and
                          automatically add your bundle to the user's repository
     Example:
 
