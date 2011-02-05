@@ -191,7 +191,7 @@ class TemplatePackage(object):
         path    = P.wtfpath(path) if path else None
         
         # import bundle from zipfile and delete
-        if path.endswith(BUNDLE_EXT):
+        if path and path.endswith(BUNDLE_EXT):
             is_fdnbundle = True
             orig_path = path
             zf = zipfile.ZipFile(path)
