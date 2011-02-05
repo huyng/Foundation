@@ -35,13 +35,6 @@ def info(txt):
     import termcolor
     print termcolor.colored('INFO  : ', 'green', attrs=['bold']) + txt
     
-def requires_path(fn):
-    @wraps(fn)
-    def _inner(*args, **kwargs):
-        assert len(args) + len(kwargs.items()) > 3, 'you must provide a path'
-        return fn(*args, **kwargs)
-    return _inner    
-
 def slugify(s, char):
     '''removes changes all non [A-Za-z0-9] and changes them to '''
     import re
@@ -61,12 +54,12 @@ class TemplatePackage(object):
     
     def __init__(self, name, pkgpath, putpath):
         object.__init__(self)
-        self.name     = name
-        self.pkgpath  = pkgpath
-        self.fdnpath  = P.join(pkgpath, '.fdn')
-        self.confpath = P.join(self.fdnpath, 'config')
-        self.putpath  = putpath if putpath != "None" else None
-        self.docpath  = P.join(self.fdnpath, 'DESCRIPTION')
+        self.name      = name
+        self.pkgpath   = pkgpath
+        self.fdnpath   = P.join(pkgpath, '.fdn')
+        self.confpath  = P.join(self.fdnpath, 'config')
+        self.putpath   = putpath if putpath != "None" else None
+        self.docpath   = P.join(self.fdnpath, 'DESCRIPTION')
         self.hookspath = P.join(self.fdnpath, 'hooks')
 
     
