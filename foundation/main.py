@@ -11,7 +11,6 @@ import configobj
 import zipfile
 import utils
 
-from functools import wraps
 from errors import ConfigMissing, \
                    NameConflict, \
                    InvalidTemplatePackage, \
