@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+
+<title>Foundation (FDN) Tool Documentation - Every great project starts with solid foundation</title>
+<link rel="icon" href="static/favicon.png" type="image/png"/>
+<link rel="stylesheet" href="static/base.css" type="text/css" />
+<!-- <link rel="stylesheet" href="debug.css" type="text/css" media="screen" title="no title" charset="utf-8"> -->
+<style type="text/css" media="screen">
+    .container {
+        margin:5em;
+        width: 55em;
+    }
+
+    h2,h3,h4,h5,h6{
+        margin-top:4em;
+    }
+    
+    div.codehilite {margin-bottom:1.43em;}
+    * div.codehilite:last-child {margin-bottom:0;}
+    
+    pre {
+        border:1px solid #eee;
+        border-left:2px solid #eee;
+        background:ghostWhite;
+        padding: 5px;
+    }
+    #watermark {
+        margin-bottom:3em;
+    }
+        #watermark .logo {
+            vertical-align:text-top;
+            margin-left:1.5em;
+        }
+        #watermark h1{
+            font-size:3em;
+            margin-bottom:-5px;
+        }
+        #tagline {
+            font-size:1.2em;
+            color: #999;
+            margin-right:10px;
+        }
+        #title {
+            float:left;
+        }
+</style>
+
+<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-6813218-1']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</head>
+
+<body id="index" class="home">
+    <div class="container">
+        <div id="watermark">        
+            <img class="logo" src="static/logo.png">
+            <div id="title">
+                <h1 id="foundationfdn">Foundation Tool (fdn)</h1>
+                <p id="tagline">Type your boilerplate code once and only once</p>
+            </div>
+        </div><!-- /#watermark -->
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="huyng">Tweet</a><fb:like href="http://www.huyng.com/projects/fdn/" layout="button_count" show_faces="true" width="450"></fb:like>
+        <br><br>
+        <!-- table of contents -->
+        <div class="clear"></div>
+        <ul>
+<li><a href='#about-foundation'>About Foundation</a></li>
+<li><a href='#getting-started'>Getting Started</a></li>
+<li><a href='#command-reference'>Command Reference</a></li>
+<ul>
+<li><a href='#add-a'>add (a)</a></li>
+<li><a href='#new-n'>new (n)</a></li>
+<li><a href='#put-p'>put (p)</a></li>
+<li><a href='#list-ls'>list (ls)</a></li>
+<li><a href='#remove-rm'>remove (rm)</a></li>
+<li><a href='#edit-e'>edit (e)</a></li>
+<li><a href='#open-o'>open (o)</a></li>
+<li><a href='#bundle'>bundle</a></li>
+<li><a href='#cdpath-cd'>cdpath (cd)</a></li>
+<li><a href='#doc-d'>doc (d)</a></li>
+<li><a href='#clip-cc'>clip (cc)</a></li>
+</ul>
+<li><a href='#configuration'>Configuration</a></li>
+<li><a href='#related-pages'>Related Pages</a></li>
+<li><a href='#license'>License</a></li>
+</ul>
+</ul>
+
+        <!-- documentation  -->
+        <div class="clear"></div>
+        <h2 id="about-foundation">About Foundation</h2>
+<p>Foundation is a scaffolding tool. It tracks your often-used project templates, code snippets and other 
+boilerplate in an easy-to-use commandline app. With a single command, generate exactly the source code
+you need for starting new projects.</p>
+<p><strong>Features:</strong></p>
+<ul>
+<li>Tab completion</li>
+<li>Post processing hooks</li>
+<li>No-hassle editing - so your code will always stay up-to-date</li>
+<li>Bundling - easily package your code to distribute to others</li>
+</ul>
+<p><strong>Usage:</strong></p>
+<div class="codehilite"><pre><span class="err">Usage:</span>
+    <span class="err">fdn</span> <span class="err">COMMAND</span> <span class="err">[ARGS...]</span>
+    <span class="err">fdn</span> <span class="err">help</span> <span class="err">[COMMAND]</span>
+
+<span class="err">Options:</span>
+    <span class="err">-h,</span> <span class="err">--help</span>  <span class="err">show</span> <span class="err">this</span> <span class="err">help</span> <span class="err">message</span> <span class="err">and</span> <span class="err">exit</span>
+
+<span class="err">Commands:</span>
+    <span class="err">add</span> <span class="err">(a)</span>        <span class="err">add</span> <span class="err">file</span> <span class="err">or</span> <span class="err">folder</span> <span class="err">to</span> <span class="err">your</span> <span class="err">repository</span> <span class="err">of</span> <span class="err">project</span> <span class="err">templates</span>
+    <span class="err">bundle</span>         <span class="err">Create</span> <span class="err">a</span> <span class="err">fdn</span> <span class="err">bundle</span> <span class="err">to</span> <span class="err">distribute</span>
+    <span class="err">cdpath</span> <span class="err">(cd)</span>    <span class="err">print</span> <span class="err">the</span> <span class="err">location</span> <span class="err">of</span> <span class="err">template</span> <span class="err">package.</span> <span class="err">use</span> <span class="err">this</span> <span class="err">to</span> <span class="err">cd</span> <span class="err">i...</span>
+    <span class="err">clip</span> <span class="err">(cc)</span>      <span class="err">copy</span> <span class="err">the</span> <span class="err">contents</span> <span class="err">to</span> <span class="err">clipboard</span> <span class="err">(only</span> <span class="err">valid</span> <span class="err">for</span> <span class="err">file</span> <span class="err">temp...</span>
+    <span class="err">doc</span> <span class="err">(d)</span>        <span class="err">print</span> <span class="err">documentation</span> <span class="err">about</span> <span class="err">the</span> <span class="err">template</span> <span class="err">packages</span>
+    <span class="err">edit</span> <span class="err">(e)</span>       <span class="err">edit</span> <span class="err">a</span> <span class="err">template</span> <span class="err">package</span> <span class="err">in</span> <span class="err">your</span> <span class="err">editor</span>
+    <span class="err">help</span> <span class="err">(?)</span>       <span class="err">give</span> <span class="err">detailed</span> <span class="err">help</span> <span class="err">on</span> <span class="err">a</span> <span class="err">specific</span> <span class="err">sub-command</span>
+    <span class="err">list</span> <span class="err">(ls)</span>      <span class="err">list</span> <span class="err">all</span> <span class="err">the</span> <span class="err">available</span> <span class="err">templates</span>
+    <span class="err">new</span> <span class="err">(n)</span>        <span class="err">add</span> <span class="err">file</span> <span class="err">or</span> <span class="err">folder</span> <span class="err">to</span> <span class="err">your</span> <span class="err">repository</span> <span class="err">of</span> <span class="err">project</span> <span class="err">templates</span>
+    <span class="err">open</span> <span class="err">(o)</span>       <span class="err">copy</span> <span class="err">the</span> <span class="err">contents</span> <span class="err">to</span> <span class="err">clipboard</span> <span class="err">(only</span> <span class="err">valid</span> <span class="err">for</span> <span class="err">file</span> <span class="err">temp...</span>
+    <span class="err">put</span> <span class="err">(p)</span>        <span class="err">create</span> <span class="err">new</span> <span class="err">project</span> <span class="err">from</span> <span class="err">template</span>
+    <span class="err">remove</span> <span class="err">(rm)</span>    <span class="err">removes</span> <span class="err">template</span> <span class="err">package</span> <span class="err">from</span> <span class="err">the</span> <span class="err">repository</span>
+</pre></div>
+
+
+<h2 id="getting-started">Getting Started</h2>
+<p><strong>Installation</strong></p>
+<div class="codehilite"><pre><span class="n">git</span> <span class="n">clone</span> <span class="n">git:</span><span class="sr">//gi</span><span class="n">thub</span><span class="o">.</span><span class="n">com</span><span class="sr">/huyng/</span><span class="n">Foundation</span><span class="o">.</span><span class="n">git</span>
+
+<span class="n">cd</span> <span class="n">Foundation</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span>
+
+<span class="c1"># Add this to your .bashrc or .profile</span>
+<span class="n">source</span> <span class="o">~</span><span class="sr">/.foundation/</span><span class="n">foundation</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+
+
+<p><strong>Example Usage</strong></p>
+<p>Create sample bundle and add to repository</p>
+<div class="codehilite"><pre><span class="nb">mkdir</span> <span class="n">newproject</span>
+<span class="n">echo</span> <span class="s">&#39;hello world&#39;</span> <span class="o">&gt;</span> <span class="n">newproject</span><span class="o">/</span><span class="n">foobar</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">fdn</span> <span class="n">add</span> <span class="n">newproject</span> <span class="o">--</span><span class="n">name</span> <span class="s">&quot;fdn-hello-world&quot;</span>
+</pre></div>
+
+
+<p>Generate a new project from previously added bundle</p>
+<div class="codehilite"><pre><span class="n">fdn</span> <span class="n">put</span> <span class="n">fdn</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">world</span> <span class="sr">/tmp/</span><span class="n">helloworld</span>
+</pre></div>
+
+
+<p>Edit your bundle</p>
+<div class="codehilite"><pre><span class="n">fdn</span> <span class="n">edit</span> <span class="n">fdn</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">world</span>
+</pre></div>
+
+
+<p>Remove the bundle</p>
+<div class="codehilite"><pre><span class="n">fdn</span> <span class="n">rm</span> <span class="n">fdn</span><span class="o">-</span><span class="n">hello</span><span class="o">-</span><span class="n">world</span>
+</pre></div>
+
+
+<h2 id="command-reference">Command Reference</h2>
+<h4 id="add-a">add (a)</h4>
+<p>Adds a DIRECTORY or FILE path to your personal repository of code snippets and project templates</p>
+<div class="codehilite"><pre><span class="err">Usage:</span>
+    <span class="err">fdn</span> <span class="err">add</span> <span class="err">&lt;DIRECTORY&gt;</span> <span class="err">|</span> <span class="err">&lt;FILE&gt;</span> <span class="err">|</span> <span class="err">&lt;FDNBUNDLE&gt;</span>
+
+<span class="err">Options:</span>
+    <span class="err">-n</span> <span class="err">NAME,</span> <span class="err">--name=NAME</span>
+                        <span class="err">a</span> <span class="err">name</span> <span class="err">for</span> <span class="err">the</span> <span class="err">package</span> <span class="err">(defaults</span> <span class="err">to</span> <span class="err">the</span> <span class="err">folder</span> <span class="err">or</span> <span class="err">file</span> <span class="err">name)</span>
+
+<span class="err">Example:</span>
+
+    <span class="err">fdn</span> <span class="err">add</span> <span class="err">MyNewDjangoProject</span> <span class="err">-n</span> <span class="err">&quot;django-hello-world&quot;</span>
+
+    <span class="err">fdn</span> <span class="err">add</span> <span class="err">snippets.txt</span>
+
+    <span class="err">fdn</span> <span class="err">add</span> <span class="err">kylesproject.fdnbundle</span>
+</pre></div>
+
+
+<h4 id="new-n">new (n)</h4>
+<p>Creates a new file-based bundle package and opens up in your editor.</p>
+<div class="codehilite"><pre><span class="err">Usage:</span>
+    <span class="err">fdn</span> <span class="err">new</span> <span class="err">`&lt;NAME&gt;`</span>
+
+<span class="err">Example:</span>
+
+    <span class="err">fdn</span> <span class="err">new</span> <span class="err">your-new-bundle-name</span>
+</pre></div>
+
+
+<h4 id="put-p">put (p)</h4>
+<p>Copies the bundle <code>&lt;NAME&gt;</code> from your personal repository into the given <code>&lt;PATH&gt;</code>. </p>
+<div class="codehilite"><pre><span class="err">Usage:</span>
+    <span class="err">fdn</span> <span class="err">put</span> <span class="err">&lt;NAME&gt;</span> <span class="err">&lt;PATH&gt;</span>
+
+<span class="err">Example:</span>
+
+    <span class="err">fdn</span> <span class="err">put</span> <span class="err">django-hello-world</span> <span class="err">/tmp/newproject</span>
+</pre></div>
+
+
+<h4 id="list-ls">list (ls)</h4>
+<p>List all available bundles in your repository</p>
+<div class="codehilite"><pre><span class="err">Usage:</span>
+    <span class="err">fdn</span> <span class="err">list</span>
+</pre></div>
+
+
+<h4 id="remove-rm">remove (rm)</h4>
+<p>Removes the package <code>&lt;NAME&gt;</code> from your repository</p>
+<div class="codehilite"><pre><span class="err">Usage:</span>
+    <span class="err">fdn</span> <span class="err">remove</span> <span class="err">&lt;NAME&gt;</span>
+
+<span class="err">Example:</span>
+
+    <span class="err">fdn</span> <span class="err">rm</span> <span class="err">crufty-piece-of-code</span>
+</pre></div>
+
+
+<h4 id="edit-e">edit (e)</h4>
+<p>Opens the bundle package <code>&lt;NAME&gt;</code> from your repository in your editor of choice.</p>
+<div class="codehilite"><pre><span class="err">Usage:</span>
+    <span class="err">fdn</span> <span class="err">edit</span> <span class="err">&lt;NAME&gt;</span>
+
+<span class="err">Options:</span>
+    <span class="err">-c,</span> <span class="err">--config</span>  <span class="err">Edit</span> <span class="err">the</span> <span class="err">configuration</span> <span class="err">file</span> <span class="err">for</span> <span class="err">template</span> <span class="err">package</span>
+
+<span class="err">Example:</span>
+
+    <span class="err">fdn</span> <span class="err">edit</span> <span class="err">myproject</span>
+
+    <span class="err">fdn</span> <span class="err">edit</span> <span class="err">myproject</span> <span class="err">-c</span>
+</pre></div>
+
+
+<h4 id="open-o">open (o)</h4>
+<p>Reveal package <code>&lt;NAME&gt;</code> from your repository in Finder</p>
+<div class="codehilite"><pre><span class="err">Usage:</span>
+    <span class="err">fdn</span> <span class="err">open</span> <span class="err">&lt;NAME&gt;</span>
+
+<span class="err">Example:</span>
+
+    <span class="err">fdn</span> <span class="err">edit</span> <span class="err">myproject</span>
+</pre></div>
+
+
+<h4 id="bundle">bundle</h4>
+<p>Packages the bundle <code>&lt;NAME&gt;</code> from your repository into zip file that you can distribute to other developers</p>
+<div class="codehilite"><pre><span class="err">Usage:</span>
+    <span class="err">fdn</span> <span class="err">bundle</span> <span class="err">`&lt;NAME&gt;`</span>
+
+<span class="err">Options:</span>
+    <span class="err">-b,</span> <span class="err">--bootstrap</span>  <span class="err">include</span> <span class="err">bootstrapping</span> <span class="err">code</span> <span class="err">that</span> <span class="err">will</span> <span class="err">install</span> <span class="err">fdn</span> <span class="err">and</span>
+                     <span class="err">automatically</span> <span class="err">add</span> <span class="err">your</span> <span class="err">bundle</span> <span class="err">to</span> <span class="err">the</span> <span class="err">user&#39;s</span> <span class="err">repository</span>
+<span class="err">Example:</span>
+
+    <span class="cp"># creates a bundle called yourproject.fdnbundle.zip</span>
+    <span class="err">fdn</span> <span class="err">bundle</span> <span class="err">yourproject</span>
+
+    <span class="cp"># makes a self installing fdnbundle</span>
+    <span class="err">fdn</span> <span class="err">bundle</span> <span class="err">yourproject</span> <span class="err">-b</span>
+</pre></div>
+
+
+<h4 id="cdpath-cd">cdpath (cd)</h4>
+<p>Print the directory location of the bundle package <code>&lt;NAME&gt;</code>. Use this to quickly jump to the package's directory.</p>
+<div class="codehilite"><pre><span class="err">Usage:</span>
+    <span class="err">fdn</span> <span class="err">cdpath</span> <span class="err">&lt;NAME&gt;</span>
+
+<span class="err">Example:</span>
+
+    <span class="err">cd</span> <span class="err">`fdn</span> <span class="err">cdpath</span> <span class="err">myproject`</span>
+</pre></div>
+
+
+<p>There's also a bash function that you can use that is equivalent to the above command. </p>
+<div class="codehilite"><pre><span class="n">fdncd</span> <span class="sr">&lt;NAME&gt;</span>
+</pre></div>
+
+
+<h4 id="doc-d">doc (d)</h4>
+<p>Print the documentation for the package <NAME> that is stored in its DESCRIPTION file</p>
+<div class="codehilite"><pre><span class="err">Usage:</span>
+    <span class="err">fdn</span> <span class="err">doc</span> <span class="err">&lt;NAME&gt;</span>
+
+<span class="err">Example:</span>
+
+    <span class="err">fdn</span> <span class="err">doc</span> <span class="err">myproject</span>
+</pre></div>
+
+
+<h4 id="clip-cc">clip (cc)</h4>
+<p>Copy the contents of a bundle package <code>&lt;NAME&gt;</code> into clipboard (must be file based not directory based)</p>
+<div class="codehilite"><pre><span class="err">Usage:</span>
+    <span class="err">fdn</span> <span class="err">clip</span> <span class="err">&lt;NAME&gt;</span>
+
+<span class="err">Example:</span>
+
+    <span class="err">fdn</span> <span class="err">clip</span> <span class="err">my-snippets-file</span>
+</pre></div>
+
+
+<h2 id="configuration">Configuration</h2>
+<ul>
+<li>All relevant files for this command live under <strong>~/.foundation/</strong>. </li>
+<li>All bundle packages are folders that reside in <strong>~/.foundation/repository</strong>.</li>
+<li>All bundle packages contain an <strong>.fdn</strong> direcotry </li>
+<li>Each <strong>.fdn</strong> directory contains a <em>config</em> file which has settings such as the "name" of a package and the files that should be copied when using the <code>put</code> command.</li>
+<li>Each <strong>.fdn</strong> directory contains a <em>DESCRIPTION</em> file which contains the description to be printed out when using the <code>doc</code> command.</li>
+<li>Each <strong>.fdn</strong> directory optionally contains a <em>hooks</em> directory where you can place scripts that FDN will execute during certain events. FDN currently only supports the "post-put" hook. </li>
+</ul>
+<h2 id="related-pages">Related Pages</h2>
+<ul>
+<li><a href="http://www.huyng.com/projects/fdn/">FDN Project Homepage</a></li>
+<li><a href="https://github.com/huyng/Foundation">FDN Github Repository</a></li>
+<li><a href="http://www.huyng.com">Author's Homepage</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>Copyright (C) Huy Nguyen 2011 </p>
+<p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</p>
+        <br>
+        <hr><br><br><br>
+        <iframe src="https://spreadsheets.google.com/embeddedform?formkey=dGE2VlNJY2J3bm9xOEFwWkxURk96UHc6MQ" width="760" height="692" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+    </div>
+</body>
+</html>
